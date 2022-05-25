@@ -40,6 +40,29 @@ The 4 most common factors are:
     - Enable the cost explorer
 2. Create a Cost Budget
     - Monthly, Recurrent, Fixed & the amount you want
-3. Create a budget alert between 50%-80% 
+3. Create a budget alert between 50%-80%
+
+
+# IAM (Identity and Access Management)
+**It is globally recilient (stored in all the world)**
+
+There are two different types of users in AWS. You are either the account owner (root user) or you are an AWS  IAM user. The only restrictions from IAM compared to the root user is on some billing features and account closure.
+
+### IAM lets you create 3 different types of identity objects:
+1. Users -> Humans or applications that need access to your account
+2. Groups -> Collection of related users (development team, finance, HR)
+3. Roles -> Can be used by AWS Services or to grant external access to your account
+
+The difference between users and roles is that a user is attached to a specific application or human and the role is like a blueprint you can use for any number of services (like a bunch of EC2 instances or an external application trying to use an S3 bucket)
+
+
+Policies -> Allow or Deny access to AWS Services ONLY WHEN THEY ARE ATTACHED TO ANY OF THE 3 OBJECTS ABOVE
+
+
+### In general IAM does:
+
+1. Manages Identities - AN ID Provider (IDP)
+2. Authenticate
+3. Authorize
 
 
