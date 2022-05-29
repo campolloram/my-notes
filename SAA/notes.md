@@ -66,3 +66,69 @@ Policies -> Allow or Deny access to AWS Services ONLY WHEN THEY ARE ATTACHED TO 
 3. Authorize
 
 
+**You can create an account alias for a friendlier interface**
+go to IAM -> left menu you should see a create alias button
+
+
+### Creating an admin user
+go to IAM -> User -> Create new user -> Attach existing policy for AdministratorAccess.
+
+
+### Access Keys
+
+An IAM user can have 2 access keys at most.
+
+They can be created and deleted or made active or inactive
+
+Access keys are formed by 2 parts:
+
+1. Access Key (similart to a username)
+2. Secret Access Key (similar to a password)
+
+You only get the Secret Access Key ID one time, its your responsibility to store it somewhere.
+
+
+Rotating access keys just means to create a new pair and remove the old one (that's why you can have 2 of them at the same time). update your applications to use that one instead.
+
+
+### AWS CLI
+
+use
+
+```
+aws configure --profile name_of_profile
+```
+to confgure multiple AWS accounts credentials in your machine.
+
+
+# Cloud Computing Fundamentals
+
+Characteristics for a system to be considered cloud
+
+1. On-Demand Self-Service
+2. Broad Netweork Access
+3. Resource Pooling
+4. Rapid Elasticity
+5. Measured Service
+
+
+### On-Demand Self-Service
+can provision capabilities as needed without requiring human interaction, on demand.
+
+
+### Broad Network Access
+Capabilites are available over the netowork and access through standard mechanisms
+
+### Resource Pooling
+No control or knowledge over the EXACT location of the resources.
+
+Resources are pooled to server multiple consumers using a multi-tenant model.
+
+### Rapid Elasticity
+Capabilities can be elastically provisioned and released to scale rapidly outward and inward with deman.
+
+To the consumer, the capabilities available for provisioning often appear to be unlimited.
+
+### Measured Service
+
+Resources usage can be monitored, controlled, reported AND billed.
