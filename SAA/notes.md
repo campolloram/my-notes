@@ -132,3 +132,50 @@ To the consumer, the capabilities available for provisioning often appear to be 
 ### Measured Service
 
 Resources usage can be monitored, controlled, reported AND billed.
+
+
+
+## Public vs Private vs Hybrid vs Multi Cloud
+
+### Public Cloud
+Considered public because they meet the 5 essential characteristics listed above AND because its open to the general public.
+
+
+### Private Cloud on-premises
+Using a service from a vendor within premises, this allows 0 latency (usually needed when delaing with huge amount of data processing.) It still needs to meet the 5 cloud characteristics. e.g. (AWS outposts, Azure Stack and Google Anthos)
+
+
+### Multi Cloud
+Using multiple cloud environments (hosting in AWS, Azure, Google Cloud, etc.), this way you are resilient to a vendor.
+
+
+###  Hbyrid Cloud
+Using private and public cloud together.
+
+
+**NOTE: Having a public cloud + legacy on premises environment, this is called a HBYRID ENVIRONMENT/NETWORK**
+
+## Cloud as a Service [X as a Service] e.g. SaaS
+
+### Infrastructure/Application Stack
+A collection of things that a software needs stacked from the botton.
+
+In a stack there are parts that you manage and parts that are managed by your vendor.
+
+**Unit of consumption** - What you consume in a service. Can be a service like Netflix or a service like EC2 instance.
+
+### Infrastructure as a Service (IaaS) e.g. EC2
+You pay a fee by time (minute, hour, etc.) and your vendor takes care of everything up to the O/S level. Starting from there is your responsibility to implement the remaining things.
+
+### Platform as a Service (PaaS) e.g. Hosting an app in Heroku or using Beanstalk
+Your unit of consumption is the runtime of a runtime environment (python, javascript, etc.)
+This is mainly used by developers.
+
+### Software as a Service (SaaS) e.g. Gmail, Dropbox
+You consume the application. You pay a monthly fee for it.
+
+
+![As a service](../media/SaaS.png)
+
+
+
