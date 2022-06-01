@@ -179,3 +179,69 @@ You consume the application. You pay a monthly fee for it.
 
 
 
+# Tech Fundamentals
+## YAML
+Design to serialize data in a human readable way
+
+Is commonly used for configuration.
+Supports lists & dictionaries e.g.
+
+![YAML example](../media/YAML_example.png)
+
+
+## Networking
+OSI 7- Layer Model (Networking Stack)
+
+![OSI Model](../media/OSI_model.png)
+
+### Layer 1 (Physical Layer)
+
+If using a shared medium (a HUB) this HUB retransmitt everything that it receives to all of the devices connected. Including Errors and collisions
+
+It's like shouting to a room with other people and not using any names
+
+
+![OSI layer 1 hub](../media/OSI_layer_1_network.png)
+
+![OSI layer 1 recap](../media/OSI_layer_1_key_points.png)
+
+
+
+### Layer 2 (Data Link) e.g. Ethernet
+It runs over layer 1
+
+Introduces the concept of Frames (Ethernet frame), which are a format for sending information over a layer 2 network
+
+It introduces MAC address for every device in the network, this address IS NOT software assigned, it is a unique addresses attached to a specific piece of hardware.
+It is divided in two parts:
+
+1. Organizational Unique Identifier - (OUI) this one is regarding the producer of the hardware 
+2. Network Interface Controller (NIC)
+
+This two parts together is what makes the address unique.
+
+
+**Frame**
+It is a protocolized way of transmitting data used by layer 3. It contains information about the MAC source, MAC destination and the Ether Type (e.g. IP addresses)
+It also contains the payload which is between 45-1500 bytes.
+
+**NOTE** When there is no destination MAC address (all Fs) it is known as broadcasting.
+
+![OSI layer 2 Frame](../media/OSI_layer_2_frame.png)
+
+
+Layer 2 checks for a carrier to see if another MAC address is transmitting, if a carrier is detected it waits for it to finish, this way there is no collision of data.
+
+Using a Switch over a HUB is better since it understands layer 2 (hast layer 2 software inside of it) (has a MAC Address table), this means that can avoid collisions
+
+
+![OSI layer 2 Switch](../media/OSI_layer_2_switch.png)
+![OSI layer 2 Recap](../media/OSI_layer_2_recap.png)
+
+
+### Layer 3 - Network (IP protocol) (Routers)
+The purpose of this layer is to get data from one location to another.
+
+Data are moved in packets (similar to Frames), this contains data to be moved as well as a destination and source addresses.
+
+![OSI layer 3 IP Packets](../media/OSI_layer_3_IP_packets.png)
