@@ -245,3 +245,93 @@ The purpose of this layer is to get data from one location to another.
 Data are moved in packets (similar to Frames), this contains data to be moved as well as a destination and source addresses.
 
 ![OSI layer 3 IP Packets](../media/OSI_layer_3_IP_packets.png)
+
+
+**IPv4**
+
+AP addresses are separated into two parts the NETWORK identifier and the HOST identifier. To know if two devices are local, you just need to see if both networks are the same.
+
+**A subnet mask is used to identify the network on an IP address**
+
+for example a /16 submask means that the first 2 bytes of the IP is the HOST.
+
+e.g.
+
+133.33.3.7/16
+
+means that the network start is
+
+133.33.0.0
+
+and the network end is 
+
+133.33.255.255
+
+This is used for machines to know when they need to route packets accross different intermediate tables (different hosts) or just to your local LAN.
+
+
+**Route Tables and Routes**
+
+This table are used by Internet providers to forward your requests to the correct destination. If there are multiple matches it uses the more specifc one. /0 is the least specific /32 is the most specific (it actually is a single IPv4 address since it has all 4 bytes)
+
+If there are no matches it uses the default destination 0.0.0.0/0
+
+
+**Address Resolution Protocol (ARP)**
+When you want to encapsulate an IP Packet into a Frame for a given MAC Address, but you don't know the MAC address of the gateway, that's when you use ARP, this will give you that MAC Address.
+
+This protocol broadcasts in layer 2 asking which device has a certain IP, the device that has that IP responds to the broadcast.
+
+
+![OSI layer 3 Recap](../media/OSI_layer_3_recap.png)
+
+
+### Layer 4 - Transport (maybe layer 5)
+
+This layer helps to order IP packets.
+It also helps to distinguish between applications, since layer 3 does not offer any way to distinguish between two or more connections.
+
+IT introduces two protocols - TCP & UDP
+
+**TCP** - Transmission Control Protocol -This is used for reliability and it is used for HTTP, HTTPS, SSH, etc.
+It is a connection oriented protocol, this means you need to set up a connection between the two devices and it creates a bi-directional channel of communication.
+
+**UDP** - User Datagram Protocol - This protocol is less realiable since it does not need the overhead of TCP, but it also has a better performance due to this.
+
+
+**TCP continuation**
+
+It uses segments which are encapsulated within IP packets.
+A segement contains the SOURCE and DESTINATION PORTS. This gives us the ability to have multiple communications to a single IP e.g. TCP port 433 is HTTPS. 
+
+It also contains a SEQUENCE NUMBER, this sequence number contians the order of the packets. This way the evice knows for which segment the IP packet belongs to and also in which order it should go.
+
+
+The ACKNOWLEDGMENT field is used for letting know the source that it received the package
+
+WINDOW - this field is used for letting the source know how many bytes you can receive between acknowledgement. Once you reach that window, the source pauses until you acknowledge the packages receives. The larger the window the faster the connection since you need less headers.
+
+CHECKSUM - this field is used for error checking and retransmission of data
+
+
+
+![OSI layer 4 TCP Segments](../media/OSI_layer_4_tcp_segment.png)
+
+
+The Ephemeral port is the port of the client connecting to the server, and the well known port is the port of the server (433 for HTTPS)
+
+![OSI layer 4 TCP Segments](../media/OSI_layer_4_tcp_connection.png)
+
+
+The TCP 3-way Handshake
+
+It is used for setting up the connection
+
+first the client needs to inform the server the sequence number. It has the SYN flag set and sends it to the server.
+
+Now that the server knows the sequence number, it creates a segment with the flag SYN-ACK to inform the client that it received the package and also sends its own sequence number and the client sequence number + 1
+
+(sequence number are initialized to a random number for security reasons)
+
+![OSI layer 4 TCP 3 way handshake](../media/OSI_layer_4_tcp_3_way_handshake.png.png)
+
