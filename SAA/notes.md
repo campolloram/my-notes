@@ -333,5 +333,122 @@ Now that the server knows the sequence number, it creates a segment with the fla
 
 (sequence number are initialized to a random number for security reasons)
 
-![OSI layer 4 TCP 3 way handshake](../media/OSI_layer_4_tcp_3_way_handshake.png.png)
+![OSI layer 4 TCP 3 way handshake](../media/OSI_layer_4_tcp_3_way_handshake.png)
+
+
+**Firewalls**
+
+Stateless Firewall - It needs both an Outbound rule and Inbound rule. This firewall in AWS is the - Network ACL -
+
+
+Stateful Firewall - This understands the state of the TCP segment, so if you  allow the initial connection you automatically allow the response. This in AWS is called a Security Group. (This may be considered layer 5 since it knows the session, meaning the on going communication)
+
+
+### Network Address Translation (NAT)
+
+Is designed to overcome the IPv4 shortages.
+
+It translate private IP addresses to public IP addresses
+
+
+**Static NAT** - Translate from 1 private to 1 fixed public address. This is called as an Internet Gateway in AWS (IGW)
+![Static NAT](../media/static_NAT.png)
+
+**Dynamic NAT** - Translate 1 private to 1st available Public IP.
+
+![Dynamic NAT](../media/dynamic_NAT.png)
+
+
+**Port Address Translation (PAT)** many private to 1 public (NATGW) This is used by your home internet router. This method uses ports to help identify the devices.
+![PAT NAT](../media/PAT_NAT.png)
+
+ALL OF THIS IS ONLY FOR IPv4 for IPv6 is not necessary since there are plenty of IPs for all devices.
+
+
+### IPv4 Addressing
+![IPv4 Key Points](../media/IPv4_addressing_key_points.png)
+
+![IPv4 classes](../media/IPv4_IP_classes.png)
+
+Basically Class A IPs support less networks (only 256) but waaay much more hosts, since each network has 16+ million IPs. They are were used by large companies, and all the classes that follow have the same principle (networks get bigger, but hosts get smaller since they won't probably use that much hosting)
+**Private Ranges**
+
+![IPv4 classes](../media/IPv4_private_ips.png)
+
+
+**IPv4 vs IPv6**
+
+![IPv4 vs IPv6](../media/IPv4_vs_IPv6.png)
+
+
+
+### IPv4 Subnetting
+This is breaking a big network into smaller networks by using a subnet.
+
+![IPv4 classes](../media/IP_subnetting.png)
+
+
+
+### DDoS
+These attacks are used to deny the service of your applications to any user by overloading your website.
+
+
+There are 3 main types of DDoS attacks:
+1. Application - Uses botnets to request really expensive endpoints
+2. Protocol - Uses botnets to attempt to initiate a TCP connection with your servers (3 way handshake) but they use a spoof IP so that the server response never reaches anything and it keeps waiting for a long time.
+3. Volumetric - Smaller botnets, they use different DNS servers to send requests using your IP as the source addresss. This makes the DNS servers respond to your website and overloads it.
+
+
+### SSL and TLS
+Gives privacy anmd data integrity between client & server.
+
+TLS - encrypts communications
+Identity (server or client/server)
+
+verified, usually the client verifies the server.
+
+Ensures a reliable connection, protects alteration of data in transit.
+
+
+TLS works as follow:
+1. First the client sends a hello message containing the information about the TLS version, supported cipher suites, session ids, etc.
+2. The server responds with an agreement of the cipher suite, etc. As well as its certificate published by an CA (Certificate Authority).
+3. The client validates the certificate by posting to the CA for checking expiration dates, DNS, etc.
+4. If the certification is valid, the client uses the server public key to encrypt a message containing the PRE-MASTER KEY.
+5. The server decrypts the pre-master key using its private key and both the client and the server generate the master key, this master key is used for doing symmetric encryption.
+
+![IPv4 classes](../media/SSL_TLS.png)
+
+
+
+
+# AWS Fundamentals
+AWS services can be categorized into 2 main types
+1. Public Services
+2. Private Services
+
+
+This public or private means to the networking only
+
+A public service is something accessed via public endpoints e.g. S3
+
+A private service is something accessed only via the V.P.C
+
+
+Permissions control the access to a public service and networking manages the access to private service
+
+
+V.P.C is proportional to your home network, it can only be accessed if you allow it and configure it.
+
+
+There are 3 different network zones
+1. Public internet
+2. AWS private zone
+3. AWS public zone
+
+
+You could connect private networks directly to a private zone service, or you could use an internet GateWay to connect you private zone to the public internet.
+
+
+![IPv4 classes](../media/AWS_types_of_networks.png)
 
