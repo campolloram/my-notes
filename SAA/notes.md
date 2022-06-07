@@ -450,5 +450,329 @@ There are 3 different network zones
 You could connect private networks directly to a private zone service, or you could use an internet GateWay to connect you private zone to the public internet.
 
 
-![IPv4 classes](../media/AWS_types_of_networks.png)
+![AWS types of networks](../media/AWS_types_of_networks.png)
+
+
+## AWS Global Infrastructure
+AWS Regions
+
+AWS Edge Locations
+- Much smaller than regions
+- Generally only have content distribution services
+- Useful for storing data close to their customers (Netflix)
+
+
+
+**There are 3 types of resilience for the AWS services**
+
+1. Globally Resilient (e.g. IAM, route 53) This services can tolerate the failure of multiple regions without impacting service
+2. Region Resilient (e.g. RDBS) Operate in a single Region with one set of data per region. This services replicate data to multiple availability zones in that region.
+
+3. AZ Resilient - This services are the least resilient. If the availability zone fails the entire service fails.
+
+## VPC (Virtual Private Cloud)
+They are Regional services, meaning that they are regionally resilient
+
+
+They are, by default, private and isolated unless you decide otherwise
+
+There are two types of VPC
+1. Default VPC
+2. Custom VPCs
+
+**Exam question: YOU CAN ONLY HAVE 1 DEFAULT VPC BY REGION** 
+
+But you can have as many custom VPCs in a region as you want.
+
+Custom VPCs need to be configured 100% by the user, they are 100% private unless configured otherwise.
+
+Default VPCs are configured by AWS  (1 per region) and they are less flexible (Usually on serious deployments you always work with custom VPCs)
+
+All of the VPCs are allocated a range of IP addresses called the VPC CIDR. 
+
+The default VPC always gets the same CIDR and can only have that CIDR which is the **172.31.0.0/16**
+
+
+The default VPC ALWAYS have 1 subnet in each availability zone of the region
+
+
+![VPC default subnets](../media/VPC_default_subnets.png)
+
+
+Default VPCs can be deleted and recreated, although some services assume that it is present so it is advised to leave them active, but not use them for any production thing realted.
+
+![Default VPC Facts](../media/Default_VPC_facts.png)
+
+
+## EC2
+**AZ Resilient**
+They are billed by the seconds it was running as well as the storage used or any commercial software that the instanced is launched with.
+
+
+![EC2 Facts](../media/EC2_key_facts.png)
+
+
+### Instance lyfecycle
+It has different states, the main ones are:
+1. Running
+2. Stopped
+3. Terminated
+
+![EC2 Lifecycle](../media/EC2_lifecycle.png)
+
+The main difference is that when an instance is stopped you are still being billed by the storage (EBS) where the instance lives, if you terminate it, you are not billed at all, but the instance is now deleted from disk and is not reversible.
+
+
+### Amazon Machine Image (AMI)
+Similar to a server image (ubuntu/windows), but it contains a few important things as well:
+
+It contains attached permissions, this permissions control which accounts can and can't use the AMI.
+
+It contains the Root Volume of the instance. This is the drive that boots the O/S
+
+It contains a Block Device Mapping - This links any volume to the device ID of the O/S (Mapping between volumes and how the O/S sees them) (root volume, data volume, etc.)
+
+![AMI](../media/AMI.png)
+
+### Connecting to EC2
+This EC2 can be running different O/S like Windows or Linux
+
+For windows instances you use RDP (Remote Desktop Protocol) this runs on port 3389
+
+For Linux instances you use SSH protocol which use port 22. You login with an SSH key pair
+
+
+
+### S3 Basics
+![S3 Basics](../media/S3_101.png)
+
+**S3 Objects**
+![S3 Objects](../media/S3_Object.png)
+
+**S3 Buckets**
+
+They are created in a specific region.
+
+You need to configure the S3 if you want the data to leave the region.
+
+**Exam Question: BUCKET NAMES NEED TO BE GLOBALLY UNIQUE**
+
+S3 has a flat structure under the hood.
+
+Folders in S3 are represented when we have object names with "/", these folder are referred to prefixes.
+
+
+![S3 Bucket](../media/S3_bucket.png)
+
+
+Exam Power Up:
+![S3 Power Up](../media/S3_powerup.png)
+
+
+### S3 Patters and Anti patterns
+S3 is an object storage system, not a file system or a block storage. 
+
+You can mount an s3 bucket into a O/S, for this you should use EBS (Elastic Block Storage). EBS only allows one thing accessing at a time, S3 does not have that limitation.
+
+It is great for offloading data, instead of your EC2 saving it, you send it to S3
+
+It should be your INPUT or OUTPUT to many aws services
+
+
+### CloudFormation Basics
+Lets you create, update or delete infrastructure in AWS in a consistent and repeteable way by using templates.
+
+**Template Keys**
+
+- Resources: All cloudformation always have the Resources key (it's mandatory)
+
+- Description: You can add a Description key for specifying the author, the use case, etc.
+
+- AWSTemplateFormatVersion: Lets you set the version of the template.
+
+
+**Exam Question: If you used the key AWSTemplateFormatVersion you need to put the Description right after it.**
+
+- Metadata: It controls how the UI is showed to the user. Generally if your template is used by a large number of users, the bigger the metadata section.
+
+- Parameters: This prompts the user for information. You can apply default values.
+
+
+- Mappings: It allows you to create lookup tables. For example If region is us-east-1 use this EC2 image, etc.
+
+- Conditions: Allows you to create conditions, (for example if EnvType is prod) and then you can use those conditions in the Resources so that only when the condition is met a certain resource is created.
+
+- Outputs: Are a way that once the template is finished it can return certain values as outputs (like admin password for a blog)
+
+
+![Cloud formation template keys](../media/Cloudformation_template_keys.png)
+
+
+
+## Cloudwatch
+Collects and manages operational data on your behalf
+
+Some metrics are gathered naitively (default) in a product.
+
+You can monitor external things by installing the cloudwatch agent.
+
+
+It has 3 main features or products in one:
+
+1. Cloudwatch itself (Metrics) [CPU utilization, visitis to a website, etc.]
+2. Cloudwatch Logs - Anything that can be logged, it can be ingested
+3. Cloudwatch Events - This events can perform other actions and can be triggered by something happening on a service or by schedule.
+
+
+**Namespaces**
+
+The namespaces are used for containing related metrics, there are default namespaces that AWS creates. e.g. AWS/EC2
+
+
+
+**Metric**
+
+A metric is a collection of related data points in a time ordered structure (CPU Usage, Network IN/OUT, etc.)
+
+**Dimensions**
+
+They are used to separate datapoints for different things within the same metric e.g. InstanceID, InstanceType, etc.
+
+
+**The metris can be linked to alarm and this alarms can have an OK status, an ALARM state, which you can link an action to it (send a SNS message), or in a insufficient data state.**
+
+
+## Shared Responsibility Model
+
+![Shared Responsibility Model](../media/shared_responsibility_model.png)
+
+
+
+## High-Availability vs Fault-Tolerance vs Disaster Recovery
+
+**High Availability (HA)**
+
+Maximizing a systems online time.
+
+You can have user disruption but still be highly available. Maybe users had re-login or re run a job, but if your service was only down for a small amount of time, it is still HA.
+
+It requires redundant servers or infrastructure as well as automation.
+![Hight Availability](../media/HA.png)
+
+**Fault-Tolerance (FT)**
+
+**HARDER TO DESIGN, HARDER TO IMPLEMENT AND MORE EXPENSIVE THAN HIGH AVAILABILITY.**
+
+FT means that the system NEEDS to keep operating properly in the event of one or more failures.
+
+
+You first need to minimize outage which is HA, BUT at the same time you need to design a system to tolerate a failure which means having high level of redundancy and system components able to route any traffic around a failed component.
+
+![Fault Tolerance](../media/FT.png)
+
+**Disaster Recovery (DR)**
+
+Multiple stage set of processes.
+
+A set of policies, tools and procedures to enable the recovery following a natural or human induced disaster.
+
+
+Taking regular back-ups in different sites where your system are stored (off-site)
+
+
+
+## DNS 101
+Is a discovery service by translating human to machine information and vice-versa
+
+
+It's a huge DB and HAS top be distributed.
+
+
+It's components are:
+
+![DNS Parts](../media/DNS_key_points.png)
+
+The Resolver needs to locate the correct Nameserver for the Zone, query the Namerserver, rerieve the Zonefile and pass it to the DNSClient.
+
+
+**DNS Root**
+
+There are 13 special name servers known as the "Root Servers", these servers are operated by 12 different large companies or organizations (this servers can be a cluster of servers, but they are managed by 1 organization). Only VeriSign manages 2 of these servers.
+
+These organizations are only responsible of hosting the servers, the actual Root Zone (the DB) is managed by an organization called, IANA.
+
+The root needs to be a trusted entity, that's the reason why your O/S or internet provider has a Root Hints File, this file is a list of this root servers.
+
+1. Your DNS Client (laptop) asks a DNS resolver the IP of a DNS name
+2. The DNS Resolver uses the Hint File to communicate with one or more of the DNS Root servers to access the Root Zone.
+
+Authoritative means that it is trusted to route for a specific DNS, the root zone at first is the only thing that is authoritative in DNS. This root zone delegates to another zone for a particular DNS, this zone then becomes authoritative ONLY for that part (.com, .org, etc.) since the root zone is ONLY authoritative for the top level zones (.com, .org, .net)
+
+
+
+## Route53 Basics
+
+1. Register Domains
+2. Host Zones.. managed nameservers
+
+It is a global service with a single database
+
+This database is globally resilient
+
+
+**Register Domains**
+
+It has relationships with all of the major domain registries (.com, .net, etc)
+
+
+How it works is:
+1. First it checks if the domain is available for that top level domain.
+2. Then Route53 creates a zone file for the domain being registered. (this zone file can be seen as a database that contains all the info for a particular domain)
+3. Route53 allocate nameservers for the zone (4 of them), it puts the zone file in these 4 managed services
+4. It add the nameserver record into the zone file for the .com/.org top level domain by using nameserver records.
+
+
+**Zones**
+
+Zone files in AWS are called hosted zones
+
+They are hosted on four managed name servers
+
+A hosted zone can be public (they live in the AWS public zone [internet])
+
+A hosted zone might be private... linked to a VPC
+
+Ahosted zone hosts DNS records.
+
+Inside Route53 the records are called recordsets
+
+
+## DNS Record Types
+
+- Namerservers (NS) = Allow delegation to occur, you can have multiple of these pointing to the same DNS, and that means that all of those servers are the Zone for that particular domain
+
+![Nameservers](../media/Nameservers.png)
+
+
+- A and AAAA Records = These records map a hostname to an IP, the only difference between them is that the A links to an IPv4 and the AAAA links to an IPv6 (usually you create two records with the same name, one for A and another one for AAAA)
+
+![A & AAAA records](../media/A_AAAA_records.png)
+
+- CNAMEs = For a given zone, these records are shortcuts, they do not point to a specific IP, they reference an A record, this is used to avoid overhead (you only change one record instead of N)
+
+![CNAMES](../media/CNAMES.png)
+
+
+
+- MX Records = Are used for email, they work the same as an A record but it uses the domain (whatever is after the @) to query de root servers to get into the domain Zone (e.g. @gmail.com => google.com) and then inside the zone it queries for the MX records.
+
+- TXT Records = Allows you to add arbitrary text to a domain, one common usage is to prove domain ownership, for example adding a random phrase to prove you own the record.
+
+
+
+**TTL (Time To Live)**
+
+This is the amount of time the authoritative answer will be cached (The result of walking the tree which is an IP linked to a DNS). If another client asks for the same DNS before the TTL expires, they will receive the Non-Authoritative answer that was cached.
+
+
 
