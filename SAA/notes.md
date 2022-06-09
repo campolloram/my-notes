@@ -1,3 +1,5 @@
+**Search for "Exam" to find possible questions and power ups**
+
 # AWS Accounts
 
 - Having multiple accounts (one for dev, one for test another one for prod) can limit the damage if some information is leaked, since they are containers and only the resources of that account can be deleted.
@@ -773,6 +775,97 @@ Inside Route53 the records are called recordsets
 **TTL (Time To Live)**
 
 This is the amount of time the authoritative answer will be cached (The result of walking the tree which is an IP linked to a DNS). If another client asks for the same DNS before the TTL expires, they will receive the Non-Authoritative answer that was cached.
+
+
+
+
+# IAM, Accounts and AWS Organizations
+
+## IAM Identity Policies
+- It is a group of statements
+- Each statement grant or deny permissions to AWS Services
+- A statement has 4 main keys:
+    1. Sid -> The ID (optional) (Best practice is to use it)
+    2. Effect -> Either "Allow" or "Deny"
+    3. Action -> The action/s to be done (service:operation)(you can use wildcards)
+    4. Resource -> List of the resources (can use wildcards as well) You need to use ARNs
+
+![IAM Policy](../media/IAM_policy.png)
+
+
+How to handle statements overlaps?
+
+
+1. First AWS looks for Explicit Denies
+2. Then it looks for Explicit Allows
+3. If no Allow or Deny -> Defaults to Deny
+
+Deny always take priorty over Allows
+
+
+
+When a user tries to access a service, AWS collects all the policies from the user, groups where the user forms part of and the resource itself and evaluate them all as a bunch.
+
+![IAM different resources](../media/IAM_policies_different_resources.png)
+
+
+**Inline policies vs managed policies**
+
+- An inline policy is attached directly to the identity
+- Managed policies exists as their own and you attached them to identities. This helps to be more reusable and low management overhead.
+
+
+Inline policies should only be used as exceptions
+
+There are two main types of managed policies, AWS managed policies and custom made policies.
+
+
+
+## IAM Users
+IAM Users are an identity used for anything that requires long-term access to AWS.
+
+Examples of this are humans, applications or service accounts.
+
+
+Principals need to authenticate themselves via User and Password or Access keys to prove IAM their identity.
+
+The principal then becames an authenticated identity.
+
+![IAM Authentication](../media/IAM_authentication.png)
+
+
+Authentication is the process of proving your identity
+
+Authorization is the process of AWS granting or denying an authenticated identity the permission to perform an action.
+
+
+**ARN**
+
+- Identifies a single resource
+- They have a defined format
+
+![ARNs](../media/ARNs.png)
+
+
+On S3 buckets you dont need a region or account ID since they are globally unique
+
+
+You can use a * for regions, usually you only need to use :: on places where you DONT need to specify, otherwise use * to denote all of them.
+
+
+The partition field is always aws unless you have in other regions, for example China
+
+the service is the service namespace (se, iam, rds)
+
+region one is obvious
+
+account-id is obvious as well (some resources don't need it as well)
+
+resource-id/resource-type can be the name of a user or an instance name
+
+EXAM POWER UP
+![IAM Power Up](../media/IAM_power_up.png)
+
 
 
 
