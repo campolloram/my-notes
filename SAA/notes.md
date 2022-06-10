@@ -867,5 +867,97 @@ EXAM POWER UP
 ![IAM Power Up](../media/IAM_power_up.png)
 
 
+## IAM Groups
+- This are containers for Users
+- Exam Question: You CAN'T log in into a group, they have no credentials.
+- They are used solely for organizing IAM Users.
+- They can have Inline or Managed policies attached
+- Exam Question: There isn't a group by default that contains all users although you can create one like that.
+- You can't have groups within groups
+- There is a soft limit of 300 groups
+- Groups are NOT a true identity. They CAN'T be referenced as a principal in a policy (e.g. you cant create an inline policy in an s3 bucket to grant acess to a group, but you can do it for a user)
+
+
+## IAM Roles
+- Multiple Users/applications (principals)
+- If you are not sure how many of these principals you are gonna have, the best way to go use is using a role
+- They are usually used for a short period of time
+- IAM Roles have 2 TYPES OF POLICIES
+    1. Trust Policies
+    2. Permissions Policy
+
+1. Trust Policies -> Controls which identities/services/roles can and can't assume the role in the same or in other AWS accounts (even allow anonymous users or other types of identities such as Facebook, Google, etc.)
+
+2. Permissions Policies -> These are the regular policies but how does AWS manages them for roles? = If an identity is allowed to assume the role, AWS creates temporary security credentials for the identity (they are time limited), once they expire the identity needs to renew them by REASSUMING the role.
+
+
+Usually roles are used in AWS organizations to allows to log in into one account and access different accounts without having to log in again.
+
+STS (Secure Token Service) is the service that manages the creation of the temporary credentials for roles.
+
+**sts:AssumeRole** is the operation used for assuming the role and getting the credentials.
+
+
+
+### When to use IAM Roles???
+
+- AWS Lambda (Function as a Service)
+
+![Lambda](../media/lambda.png)
+
+
+- For Emergency situations (when a customer service needs to terminate an instance for example, this is referred as break glass situation)
+
+![Emergency Role](../media/emergency_role.png)
+
+
+- For giving access to users that are part of other organization like Azure, and specially if they are over 5,000. This way they assume the role and get temporary keys.
+THIS IS CALLED ID FEDERATION
+
+
+Exam question: When dealing with architecture for mobile apps user access (potentially millions of them) using ID Federations (IAM Roles) is the best way
+
+
+
+## Serviced-linked roles
+![Service Linked Roles](../media/service_linked_roles.png)
+
+
+## AWS Organizations
+A product that allows larger business to manage multiple AWS accounts in a cost effective way
+
+- [Management Account] AWS Organization is created via a single AWS Account, the Management Account, this account its not within the organization, and the organization DOES NOT live inside this account.
+- Using the management account you can invite other standard accounts to be part of the organization, when they decide to join the become member accounts.
+
+
+Organizations have two types of "containers" the Root and the Unit.
+
+The root stands at the top and can be one or more member accounts (or the management account), it can also contain other containers (Orgniazational Units [OU])
+
+![Organization Root](../media/Organization_Root.png)
+
+
+**Consolidated Billing**
+
+Individual billing methods are removed from the member accounts, and now they pass that billing to the management account (payer account)
+
+![Consolidated Billing](../media/consolidated_billing.png)
+
+
+- You can also create new accounts within organizations (directly in the organization), this way the account does not need be invited and then accept the invitation
+
+
+BEST PRACTICES:
+
+The best practices with organizations is to have a single account that handles all the IAM identities, this could be the management account or another account. You can also configure in this IAM account, using ID Federation, to use your own internal log in system for logging into AWS.
+
+
+**When you add an existing account to be part of the organization you need to MANUALLY CREATE the "OrganizationAccountAccessRole"**
+
+If the account was created directly via the management account, this role will be created for you by default.
+
+
+
+
 
 
