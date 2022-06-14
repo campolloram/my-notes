@@ -867,5 +867,240 @@ EXAM POWER UP
 ![IAM Power Up](../media/IAM_power_up.png)
 
 
+## IAM Groups
+- This are containers for Users
+- Exam Question: You CAN'T log in into a group, they have no credentials.
+- They are used solely for organizing IAM Users.
+- They can have Inline or Managed policies attached
+- Exam Question: There isn't a group by default that contains all users although you can create one like that.
+- You can't have groups within groups
+- There is a soft limit of 300 groups
+- Groups are NOT a true identity. They CAN'T be referenced as a principal in a policy (e.g. you cant create an inline policy in an s3 bucket to grant acess to a group, but you can do it for a user)
+
+
+## IAM Roles
+- Multiple Users/applications (principals)
+- If you are not sure how many of these principals you are gonna have, the best way to go use is using a role
+- They are usually used for a short period of time
+- IAM Roles have 2 TYPES OF POLICIES
+    1. Trust Policies
+    2. Permissions Policy
+
+1. Trust Policies -> Controls which identities/services/roles can and can't assume the role in the same or in other AWS accounts (even allow anonymous users or other types of identities such as Facebook, Google, etc.)
+
+2. Permissions Policies -> These are the regular policies but how does AWS manages them for roles? = If an identity is allowed to assume the role, AWS creates temporary security credentials for the identity (they are time limited), once they expire the identity needs to renew them by REASSUMING the role.
+
+
+Usually roles are used in AWS organizations to allows to log in into one account and access different accounts without having to log in again.
+
+STS (Secure Token Service) is the service that manages the creation of the temporary credentials for roles.
+
+**sts:AssumeRole** is the operation used for assuming the role and getting the credentials.
+
+
+
+### When to use IAM Roles???
+
+- AWS Lambda (Function as a Service)
+
+![Lambda](../media/lambda.png)
+
+
+- For Emergency situations (when a customer service needs to terminate an instance for example, this is referred as break glass situation)
+
+![Emergency Role](../media/emergency_role.png)
+
+
+- For giving access to users that are part of other organization like Azure, and specially if they are over 5,000. This way they assume the role and get temporary keys.
+THIS IS CALLED ID FEDERATION
+
+
+Exam question: When dealing with architecture for mobile apps user access (potentially millions of them) using ID Federations (IAM Roles) is the best way
+
+
+
+## Serviced-linked roles
+![Service Linked Roles](../media/service_linked_roles.png)
+
+
+## AWS Organizations
+A product that allows larger business to manage multiple AWS accounts in a cost effective way
+
+- [Management Account] AWS Organization is created via a single AWS Account, the Management Account, this account its not within the organization, and the organization DOES NOT live inside this account.
+- Using the management account you can invite other standard accounts to be part of the organization, when they decide to join the become member accounts.
+
+
+Organizations have two types of "containers" the Root and the Unit.
+
+The root stands at the top and can be one or more member accounts (or the management account), it can also contain other containers (Orgniazational Units [OU])
+
+![Organization Root](../media/Organization_Root.png)
+
+
+**Consolidated Billing**
+
+Individual billing methods are removed from the member accounts, and now they pass that billing to the management account (payer account)
+
+![Consolidated Billing](../media/consolidated_billing.png)
+
+
+- You can also create new accounts within organizations (directly in the organization), this way the account does not need be invited and then accept the invitation
+
+
+BEST PRACTICES:
+
+The best practices with organizations is to have a single account that handles all the IAM identities, this could be the management account or another account. You can also configure in this IAM account, using ID Federation, to use your own internal log in system for logging into AWS.
+
+
+**When you add an existing account to be part of the organization you need to MANUALLY CREATE the "OrganizationAccountAccessRole"**
+
+If the account was created directly via the management account, this role will be created for you by default.
+
+
+## Service Control Policies
+They are used for delimiting the access that accounts have within an organization, e.g. Just delimit to a certain region (us-east-1), only allows a certain size of EC2 instance, etc.
+
+- These policies are attached to the organization as a whole (to the root container), or one ore more Organizational Unit or even a specific AWS account.
+- They inherit down the organization tree, this means that policies in the root are applied to all the accounts in the organization, etc.
+- The management account is NEVER affected with service control policies, that is the reason why resources should not be in that account.
+- These policies are account permissions boundaries, they limit what the account can do (Even the account root user).
+
+ 
+These policies are called either Allow or Deny List
+
+- By default AWS provides a FullAWSAccess which is an Allow list that allows everything.
+- Any restrictions needs to be added by you.
+
+
+At the end in an organization a user has the permissions that both the SCP and the Identity policies grants.
+![SCP IAM Ben Diagram](../media/SCP_and_IAM.png)
+
+
+
+## Cloudwatch Logs
+For creating logs, it can be either an AWS service that uses cloudwatch directly or by using the agent inside an application.
+
+You can create metrics that trigger alarms using logs
+
+![Cloudwatch Logs](../media/cloudwath_logs.png)
+
+
+Log streams -> Ordered set of log events for a specific source for a specific thing
+
+Log groups -> Containers for multiple log streams for the same type of logging.
+
+You store configuration settings at the log group level (retention, etc.)
+
+You also define metric filters at the log group level.
+
+Metric filters increment a metric which can be linked to alarms.
+
+
+## CloudTrail Essentials
+- Logs API calls/activities as a CloudTrail Event
+- A CloudTrail Event is any activity taken by a user or role or service in the account.
+- Stores by default the last 90 days of history (no cost)
+- If you want to customize with more days, you need to create 1 or more Trails
+- Events can be of 2 kinds:
+    1. Management Events -> e.g. Creating/terminating an EC2 instance
+    2. Data Events -> e.g. Objects being uploaded or accessed from S3
+
+- **By default cloud trails only stores management events, since data events have higher volume.**
+
+- A "Trail" is the unit of config inside inside cloudtrail
+- A "Trail" logs events for the region is configurated
+- You can also create trails for all regions
+- **GLOBAL SERVICES LOG TO us-east-1** e.g. IAM
+- The logs can be stored in an s3 bucket, and that way they can be stored indefinitely
+- You can also store the cloudtrail logs into cloudwatch logs.
+- You can now create organizational trails (stores logs for all accounts)
+
+**NOT REALTIME** It takes around 15 mins
+
+EXAM POWER UP:
+
+![Cloud Trail Power Up](../media/cloudtrail_powerup.png)
+
+
+**Charges in cloudtrail:**
+
+- The 90 daya default is free
+- You can have 1 copy of management free in every region (1 trail) in each account
+- Any additional trails are charged at 2dls per 100k events.
+- When logging data events comes with a charge regardless of the number, 10 cents per 100k events.
+
+
+
+# S3
+## S3 Security
+- S3 is private by default
+- The only identity that has access to a bucket by default is the account root user
+- By using resource policy you can give access to multiple users in different accounts.
+- Using resource policies can allow or deny anonymous principals as well.
+
+**Access Control Lists (ACLs) LEGACY [recommended to use bucket policies instead]**
+
+![ACLs](../media/ACLs.png)
+
+
+**Block Public Access**
+
+This is a setting used for blocking any public access to the bucket NO MATTER what the policies says. It can be either for ACLs or policies either new or existing ones as well
+
+
+
+Exam Power UP:
+
+![Exam Power Up S3 Security](../media/S3_Security_Exam_Power_Up.png)
+
+
+## S3 Static Website Hosting
+- This feature allows acces via HTTP.
+- Index and Error documents are set.
+- When you enable this feature in a bucket, AWS creates a website endpoint (it is automatically generated)
+
+
+![S3 Static Website](../media/S3_static_website_offloading.png)
+
+
+## Object Versioning
+- It starts as disabled, BUT once its enabled you CAN'T GO BACK to disabled, you can move it back to suspended and back to enabled
+- Basically object versioning assign an ID to the objects, this way you can have multiple objects with the same name but with different IDs
+- When deleting AWS puts a delete marker which hides the other versions, this way you can undelete and AWS only unhides the objects by eliminating the marker.
+- You can also delete an actual object by specifying the version
+
+
+## MFA Delete
+- Enabled in versioning config
+- MFA is required to change bucket versioning state
+- MFA is required to delete versions
+- You will need to provide both the serial number of your MFA + Code that it generates
+
+
+## S3 Performance Optimization
+- By default objects are uploaded as a single data stream to s3
+- The problem is that if an upload fails, this means that the entire stream fails (requires full restart)
+- Speed & reliability = limit of 1 stream
+
+The solution for this is using multipart upload
+
+**Multipart Upload**
+
+
+- Data is now broken up into chunks (minimum size is 100MB)
+- Never use single stream for objects above 100MB in size, it's really unreliable
+- An upload can be split into a max of 10,000 parts, each part can range in size between 5MB and 5GB
+- Parts can fail, AND be RESTARTED in isolation
+- By doing this the risk is reduced and at the same time it improves the transfer rate.
+
+
+**S3 Accelerated Transfer**
+
+- By default data uploaded to an S3 bucket uses the public internet for routing it to the destination, this can cause overhead since the route taken by the DNS resolver might not be the most optimal one.
+
+- This feature allows our data to have optimized routing paths by using AWS Edge locations as a connection point, and then it will use the most direct path to the router where our S3 bucket is located.
+
+![S3 Transfer Acceleration](../media/S3_Transfer_Acceleration.png)
+
 
 
