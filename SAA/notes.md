@@ -1264,4 +1264,89 @@ It has a management fee -> It is designed for long-lived data with changing or u
 
 
 
+### S3 Lifecycle Configuration
+- Set of rules that are applied to a bucket
+- These rules can apply to the entire bucket or to group of objects inside the bucket
+- Actions can be:
+    1. transition actions -> Changes storage class of objects
+    2. Expiration Actions -> Deletes objects
+- These rules ARE NOT based on access, that is done via intelligent tiering
+
+Transition only happens in a downward direction,
+
+Be careful to transition small objects since they might even cost more.
+
+There is a minimum of 30 days in standard before transition.
+
+![S3 Lifecycle](../media/S3_Lifecycle.png)
+
+
+## S3 Replication
+There are 2 types:
+1. Cross-Region Replication
+2. Same-Region Replication
+
+
+The replication config is applied from the source bucket, you need to configure the destination bucket as well as the role needed. 
+
+If configuring replication to a different account, you need to add a bucket policy to the destination bucket.
+
+![S3 Replication](../media/S3_replication.png)
+
+**S3 Replication Options**
+
+- The default is all objects (all prefixes and all tags)
+- You can also create a rule as a filter (for pre-fix, tags, etc.)
+- You can also pick the storage class to use.
+- You can also override the ownership so that it points now to the destination account
+
+
+**Exam questions!!!:**
+
+
+- Replication Time Control (RTC) -> Is used to mantain sync within 15 mins window.
+
+- Replication is not retroactive & versioning needs to be ON (Not retroactive means that objects that were already in the bucket ARE NOT gonna be replicated.)
+
+- One way replication Source to Destination only
+
+- You can replicate unencrypted, SSE-S3, SSE-KMS (With extra config) NOT capable of replicating SSE-C!
+
+- Source bucket owner needs permissions to the objects.
+
+- NO replication on system events (lifecycle management)
+
+- CANT replicate objects that are Glacier or Glacier Deep Archive (they are cold)
+
+- NO DELETES are replicated
+
+
+
+Why use replication?????
+
+- SRR - Log Aggregation (using tags or indexes)
+- SRR - PROD and TEST Sync
+- SRR - Resilience with strict sovereignty
+- CRR - Global Resilience Improvements
+- CRR - Latency Reduction
+
+
+### S3 Presigned URLs
+This is usually used for giving access to private S3 buckets to users thata are signed in into a private application. This way you only need an IAM User logged in in the application, when the application user asks for a video or photo, the applications asks for a presigned URL with an expiration of 2 hours or so and returns that link to the user. That way the S3 bucket keeps being private and you dont need to give access to some credentials to the user, neither download the video (can be seen through the web)
+
+
+
+- It is a way to configure a URL for accessing specific objects in an S3 object that is not Public
+- The URL has an expiration date
+- The person that uses the presigned URL has the same permissions that the person that created the URL for that specific object
+- DO NOT create presigned URLs using a Role (only an Identity) this is due to expiring credentials of the Role and that makes the URL invalid.
+
+![S3 Presigned URLs](../media/S3_presigned_urls.png)
+
+
+
+Exam PowerUp!
+
+![S3 PresignedURLs Exam Power UP](../media/S3_presigned_urls_exam_power_up.png)
+
 
