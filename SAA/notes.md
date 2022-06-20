@@ -1350,3 +1350,66 @@ Exam PowerUp!
 ![S3 PresignedURLs Exam Power UP](../media/S3_presigned_urls_exam_power_up.png)
 
 
+
+## S3 Select and Glacier Select
+- Using a SQL like statement to select part of an object.
+- You can use this with JSON, CSV, Parquet, etc.
+
+By doing this you filter the data in S3 instead of your app and this helps on speed and cost.
+
+
+## S3 Events
+- Is kind of legacy since you can use Event Bridge to do the same
+- Lets you confiugre events based on Uploads, Deletions, etc. in a bucket, and send some message to either SNS, SQS or Lambda.
+
+
+## S3 Access Logs
+- You need to enable logging in the bucket.
+- You have a source bucket and a target bucket.
+- The target bucket is the one storing the logs from the source bucket
+- You need to manage the movement or deletion of the logs by yourself.
+
+
+# VPC
+## VPC Sizing and Structure
+- You need to consider other networks IP subnets and choose an IP range that does not overlap with those networks
+- Adrian recommends 10.x.y.z range where you can avoid the first 10.0 and 10.1 and choose 10.16.0.0/17 as the submask.
+- Reserve at least 2 network ranges per region being used per account.
+- In the Animals4Life scenario, we need 5 regions (3 on the US, 1 Europe and 1 Australia), and we need 4 Accounts, that gives us a total of 5 x 2 x 4 (the 5 are the number of regions, the 2 are the networks needed per region and the 4 is the total number of Accounts [dev, stage, prod, demo?]) This gives us an ideal number of 40 ranges to use, with the 10.16.0.0/17 is more than enough.
+
+
+## VPC sizing
+![VPC Sizing](../media/VPC_sizing.png)
+- Usually a good starting point is having 3 AZ and a spare one for the future.
+
+- For each one of this netoworks usually you will have 3 tiers, WEB, APP and DB but it is also good practice to consider one more as the spare one (4 subnets)
+
+- Each tier has its own subnet FOR EACH AVAILABILITY ZONE, this means that we will end up having 4 WEB subnets, 4 APP subnets, etc.
+
+
+When you know the number of subnets needed then you just need to define how big your VPC needs to be based on the amount of IPs you will need for each subnet.
+
+
+If you choose a VPC of size /16 then you know each subnet will have a /20 mask, if you choose a VPC of size /17 each subnet will have /21 and so on so forth.
+
+ 
+![VPC Structure](../media/VPC_Structure.png)
+
+
+## How to build your VPC
+
+End Result will be:
+![VPC End Result](../media/VPC_End_Result.png)
+
+
+- Each VPC has at least 1 private CIDR block and this block ranges from a /16 (65,536 IPs) to a /28 (16 IPs)
+
+- There is a maximum of 5 VPCs per account.
+- Optional single assigned IPv6 /56 CIDR Block
+- VPC have fully featured DNS provided by Route 53
+- VPC DNS is Base IP + 2 Address
+- Exam Questions:
+    1. enableDnsHostnames -> A setting for giving DNS Names to instances with public IP addresses in the VPC.
+    2. enableDnsSupport -> Indicates whether DNS resolution is enabled or disabled in the VPC, if its enabled then instances in the VPC can use the VPC address.
+
+
