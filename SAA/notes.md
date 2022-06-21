@@ -1413,3 +1413,29 @@ End Result will be:
     2. enableDnsSupport -> Indicates whether DNS resolution is enabled or disabled in the VPC, if its enabled then instances in the VPC can use the VPC address.
 
 
+## VPC Subnets
+- They are where your services run from inside VPCs
+- In AWS diagrams BLUE MEANS PRIVATE SUBNETS and GREEN MEANS PUBLIC SUBNETS
+
+- Subnets are AZ Resilient
+- A Subnet can't be in more than 1 AZ!
+- IPv4 CIDR is a subset of the VPC CIDR
+- Cannot overlap with other subnets
+- Can optional have an IPv6 CIDR
+- Subents can communicate freely with other subnets in the VPC
+- THERE ARE 5 IP addresses that are reserved in every subnet
+    1. Network Address (the first address)
+    2. Network + 1 (VPC Router)
+    3. Network + 2 (Reserved DNS)
+    4. Network + 3 (Reserved Future Use)
+    5. Last IP Address (Broadcast)
+
+
+A VPC has a configuration object applied to it called DHCP (Dynamic Host Configration Protocol) and is how computing devices receive IP addresses automatically.
+
+    This configration flows to subnets
+
+
+At subnet level:
+- You can also use auto assign public IPv4 (for making subnets publics)
+- Auto Assign IPv6
