@@ -1439,3 +1439,45 @@ A VPC has a configuration object applied to it called DHCP (Dynamic Host Configr
 At subnet level:
 - You can also use auto assign public IPv4 (for making subnets publics)
 - Auto Assign IPv6
+
+
+## VPC Routing and Internet Gateway
+
+**VPC Routing**
+- Every VPC has a VPC Router - Highly available (by default it only routes traffice between subnets in the VPC)
+- In every subnet netowrk + 1 address is the one used.
+- This is controlled with "route tables" (each subnet has one and ONE ONLY)
+- A VPC has a Main route table (This is the default for subnets)
+- Route tables always give higher prefix higher priority (/32 match has more priority than a /16)
+- The route tables ALWAYS have local routes which matches the CIDR block of the VPC (for both IPv4 and IPv6), local routes always have priority over public routes.
+
+
+**Internet Gateway (IGW)**
+- Exam Question: Region Resilient (covers all AZ in a region) gateway attached to a VPC
+- A VPC can have either 0 or 1 IGW
+- An IGW can have no VPC attached or be attached to ONLY 1 VPC
+- Gateways the traffice between the VPC and the Internt or AWS public Zone (S3..SQS...etc)
+- Managed by AWS
+
+**How to make a subnet public:**
+
+![Using an IGW](../media/IGW.png)
+
+**IPv4 Addresses with a IGW**
+- Exam question: The EC2 instances (or any service) that has a public IPv4 associated DOES NOT KNOW PUBLIC IP AT THE O/S LEVEL.
+- The IGW receives the packet sent by the service and checks if it has a IPv4 associated and changes the packet source IP to that one. And when the packets come back from the source, it changes the source public IP to the internal network IP
+- For IPv6 the O/S or service does have the public IP and the IGW does not do any translation. It just routes traffic
+
+
+**Bastion Host or Jumpbox**
+- An instance in a public subnet
+- Incoming management connections arrive there
+- Then access internal VPC resources
+- Often is the only way IN to a VPC
+
+
+## Stateful vs Stateless Firewalls
+- Statless firewalls dont't know anything about the state of the request, this means having to create inbound and outbound rules.
+- Stateful firewalls know the state of the requests, this is because it identifies the request and response components of a connections as being related. REDUCES ADMING OVERHEAD
+
+
