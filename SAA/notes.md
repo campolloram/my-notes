@@ -1481,3 +1481,42 @@ At subnet level:
 - Stateful firewalls know the state of the requests, this is because it identifies the request and response components of a connections as being related. REDUCES ADMING OVERHEAD
 
 
+
+## Netowrk Access Control Lists (NACL)
+- Every subnet has a NACL associated
+- This filter data incoming and outgoing
+- Connections between the subnet is not affected by NACLs
+- It always has inbound and outbound rules (stateless)
+- They are stateless
+- Rules are processed in order (whatever comes first is applied)
+- They can explicitly deny access which makes them a good security feature for denying access to certain IPs
+- They only work with IPs and Ports, can't be configured using logical resources.
+- Can only be assigned to subnets, not to AWS resources.
+- THEY ARE USUALLY USED ALONG SIDE SECURITY GROUPS TO ADD EXPLICIT DENY to BAD IPs/Nets
+
+
+## Security Groups (SG)
+- They are STATEFUL - detect response automatically
+- They CAN'T do implicit denies, you need NACLs for this
+- They do accept IPs/ports and logical resources
+- They are not attached to instances nor subnets, they are attached to ENIs (Network Interfaces)
+
+- You can use logical resource reference to access other resources by using their security group ( e.g. create an inbound rule in the backend app SG for allowing any connection from any resource that has the security group of web server attached, this way you do not need specific IPs) You can use self reference so that any other resource that has the same SG can access the subnet (e.g. having multiple backend apps in different subnets but sharing the same SG).
+
+
+## NAT and NAT Gateways
+- Network Address Transaltion (NAT) -> Changing source IP address and destination address for routing packets
+- IP masquerading - hiding CIDR blocks behind one IP
+- Gives Private CIDR range OUTGOING internet access (can't be used for incoming, although it does accept responses from the outgoing requests.)
+- This is used because IPv4 addresses are running out
+- Usually used for allowing private subnets to do updates/OS patches/external database connections/etc.
+- It basically has a table containing the private IPs of the instances and the requests they made and it acts as the middle man between the IGW and the private instances (routes table from the private instances to the IGW and then does the inverse with the responses, routing them from the IGW to the private instances) 
+- Many to one translations
+- NAT Gateways runs from a PUBLIC SUBNET, since it needs a public IP associated
+- It uses Elastic IPs (Static IPv4 Public)
+- AZ resilient Service 
+- For replicating IGW resilient you need to create one per AZ
+- It has two charging elements, one that is per hour and another that is per data volume
+
+
+
