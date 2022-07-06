@@ -1518,5 +1518,19 @@ At subnet level:
 - For replicating IGW resilient you need to create one per AZ
 - It has two charging elements, one that is per hour and another that is per data volume
 
+Exam question: EC2 can be used as a NAT instance (AWS recommends using NAT Gateway instead), by default EC2 drops any data in the netowrk card when that network is not either the source or the destination of a request. If you ever need an EC2 instance to function as a NAT instance you need to disable the setting called "Source/Destination Checks".
+
+You should only use NAT instances over NAT gateways if you are in a budget. This is because NAT Gateways scale depending on your traffic, so the cost is not deterministic.
+
+Another pro of NAT instances is that you can connect to the instance and also use if for other purposes. NAT Gateways cant be connected to the O/S
+
+
+Exam Question: NAT Gateways ONLY SUPPORT NACLs (can't have a security group), NAT instanes can have security groups.
+
+
+NAT Gateways do not work with IPv6, IPv6 does not need NAT at all. As long as you add to your route table the route: "::/0 -> IGW" that will give any instance in the subnet that have IPv6 bi-directional connectivity
+
+
+
 
 
