@@ -1505,6 +1505,7 @@ At subnet level:
 
 
 ## NAT and NAT Gateways
+Exam question: NAT Gateways are not region resilient they are AZ resilient, IGW is indeed region resilient.
 - Network Address Transaltion (NAT) -> Changing source IP address and destination address for routing packets
 - IP masquerading - hiding CIDR blocks behind one IP
 - Gives Private CIDR range OUTGOING internet access (can't be used for incoming, although it does accept responses from the outgoing requests.)
