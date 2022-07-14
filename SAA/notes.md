@@ -1482,6 +1482,7 @@ At subnet level:
 
 
 
+
 ## Netowrk Access Control Lists (NACL)
 - Every subnet has a NACL associated
 - This filter data incoming and outgoing
@@ -1532,6 +1533,90 @@ Exam Question: NAT Gateways ONLY SUPPORT NACLs (can't have a security group), NA
 NAT Gateways do not work with IPv6, IPv6 does not need NAT at all. As long as you add to your route table the route: "::/0 -> IGW" that will give any instance in the subnet that have IPv6 bi-directional connectivity
 
 
+# EC2
+## Virtualization
+Servers have an O/S (e.g. Linux, Windows).
+The kernel is the the only part of the O/S that runs with Privileged Mode, all the other applications in the O/S run with User Mode (can't directly interact with the hardware, needs to make a system call)
+
+Virtualization makes possible for a single piece of hardware to run multiple O/S. Each O/S is separate
+
+- The problem that arises with this is that the O/S from the Virtual Machines were expecting all to have privileged mode, but since they were running on the same hardware, that could not be possible (the hardware only knew about the host O/S)
+
+- This issue can be solved with "Emulated Virtualization" by using a hypervisor. A hypervisor is a piece of software that runs in the host O/S and acts as the middle man, this hypervisor creates fake resources that the VM O/S thinks are real. By using binary translation in software, the hypervisor intercepts any sys calls that the VMs are trying to make and translate those sys calls for the host O/S, the problem with this type of virtualization is that it is really slow, since it is doing in on the fly using software.
 
 
+- Para Virtualization solves this slow issue. This is done by modifying the VMs O/S to make "hypercalls" instead of sys calls. This way you can get rid of binary transaltion.
 
+- There was still some processes made by software to trick the O/S that nothing has changed since the hardware itself was not aware of virtualization. This was solved when the physical hardware was aware of virtualization, and this is called "Hardware Assisted Virtualization"
+
+- With HAV the CPU traps this hypercalls itself and then sends them to the hypervisor. This method helps a lot BUT the I/O operations where still really slow since there was only 1 network card for all the VMs and there was some level of software getting in the way (for this type of operations it really affects having software on top). This was solved with SR-IOV (Single Root -I/O Virtualization) this basically when hardware devices themselves (like network cards) become virtual aware. This way the network card creates "mini network cards" inside of it and lets the VMs use this mini cards, this way software is no longer needed to handle the process.
+
+
+### EC2 Architecture
+EC2 is AZ resilient!!!
+
+![EC2 Architecture](../media/EC2_architecture.png)
+Inside each AZ there is an EC2 Host (these EC2 Host runs on a single AZ).
+
+EC2 Hosts have local hardware BUT also have some local storeage called "Instance Store" this store is temporary, if the instance moves from a particular host to another one, the local storage is lost.
+
+The host also has 2 types of networking: 
+1. Storage networking
+2. Data networking
+
+When instances are provisioned in a specific subnet within a VPC, what happens is that a Primary Elastic Network Interface is provisioned in the SUBNET which maps to the physical hardware of the host.
+
+
+- Instances can have different network interfaces even in different subnets as long as the are all in the same AZ 
+
+
+- EC2 can make use of remote storage by using EBS (Elastic Block Store) EBS ALSO RUNS IN A SPECIFIC AZ.
+
+
+- EBS lets you allocate volumes (storage) to instances IN THE SAME AZ.
+
+There are just 2 ways where an instance may change of host (another host in the same AZ):
+1. AWS takes a server down for maintainance
+2. You stop an instance and then start it again (restarting it directly won't change the host, needs to be stopped and started)
+
+- Usually instances of the same type runs on the same host
+
+
+**What's EC2 Good for?**
+- Traditional OS+Application Compute.
+- Long-Running Compute (even years)
+- Server style applications (Traditional applications waiting for incoming connections)
+- Applications or services that need burst or steady-state loads.
+- Monolithics application stacks
+- Disaster Recovery environment
+
+
+In general EC2 tends to be the default requirement (first option)
+
+
+**As a rule of thumb, always pick EC2 at first and then just move away if you have some specific requirement**
+
+
+## EC2 Instances Types
+Things influenced by the resource type:
+1. Resource Ratios (RAM, CPU, etc.Local storage & type of storage)
+2. Storage and Data Network Bandwidth 
+3. System Architecture/Vendor (ARM vs x86)
+4. Additional Features and Capabilties (GPUs)
+
+
+There are 5 main categories:
+1. **General Purposes** - Should be your default (even ratios on resources)
+2. **Compute Optimized** - Media processing, High performance Computing, Scientific Modelling, gaming, ML
+3. **Memory Optimized** - Processing large in-memory datasets, some database workloads.
+4. **Accelerated Computing** - (niche) Hardware GPU, field programmble gate arrays (FPGAs)
+4. **Storage Optimized** - Sequential and Random IO - scale-out transactional databases, data warehousing, Elasticsearch, analytics workloads.
+
+### Decoding EC2 Types
+R5dn.8xlarge -> Example of an instance type
+![EC2 Decoding Type](../media/EC2_decoding_type.png)
+** M Family is more expensive, but they are better for applications with steady load, they also have a better bandwith with EBS compared to T family, T family is a good fit when you have bursts but usually your app is idle. (They area cheaper)**
+
+
+### EC2 Instance types Table
+![EC2 Instance Type](../media/EC2_Instance_Type.png)
