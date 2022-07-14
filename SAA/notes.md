@@ -1534,6 +1534,7 @@ NAT Gateways do not work with IPv6, IPv6 does not need NAT at all. As long as yo
 
 
 # EC2
+**Resiliency: AZ**
 ## Virtualization
 Servers have an O/S (e.g. Linux, Windows).
 The kernel is the the only part of the O/S that runs with Privileged Mode, all the other applications in the O/S run with User Mode (can't directly interact with the hardware, needs to make a system call)
@@ -1553,7 +1554,6 @@ Virtualization makes possible for a single piece of hardware to run multiple O/S
 
 
 ### EC2 Architecture
-EC2 is AZ resilient!!!
 
 ![EC2 Architecture](../media/EC2_architecture.png)
 Inside each AZ there is an EC2 Host (these EC2 Host runs on a single AZ).
@@ -1608,8 +1608,7 @@ Things influenced by the resource type:
 There are 5 main categories:
 1. **General Purposes** - Should be your default (even ratios on resources)
 2. **Compute Optimized** - Media processing, High performance Computing, Scientific Modelling, gaming, ML
-3. **Memory Optimized** - Processing large in-memory datasets, some database workloads.
-4. **Accelerated Computing** - (niche) Hardware GPU, field programmble gate arrays (FPGAs)
+3. **Memory Optimized** - Processing large in-memory datasetsyou want to mount a volume in a file system
 4. **Storage Optimized** - Sequential and Random IO - scale-out transactional databases, data warehousing, Elasticsearch, analytics workloads.
 
 ### Decoding EC2 Types
