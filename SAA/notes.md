@@ -1620,3 +1620,71 @@ R5dn.8xlarge -> Example of an instance type
 
 ### EC2 Instance types Table
 ![EC2 Instance Type](../media/EC2_Instance_Type.png)
+
+
+
+## Storage
+**KEY TERMS**
+
+1. **Direct (local) attached Storage** - Storage on the EC2 Host. It is super fast, but it can be lost in a lot of scenarios, like changing host or if the hardware fails.
+
+2. **Network attached Storage** - Volumes delivered over the network. (EBS)
+
+3. **Ephemeral Storage** - Temporary Storage (local storage)
+
+4. **Persistent Storage** - Permanent Storage (The network attached storage provided by EBS)
+
+5. **Block Storage (EBS)** - Volume presented to the OS as a collection of blocks (no structure provided) It is Mountable, Bootable. On top of this the O/S creates a file system (NTFS, EXT3) and mounts that as the root volume. Block storage comes on the form of actual physical storage (SSD) or by a logical volume which is backed by different types of physical storage (SSD or HardDisks)
+
+6. **File Storage (EFS)** - Presented as a file share ... has strucutre. Mountable NOT BOOTABLE.
+
+7.  **Object Storage (S3)** - Collection of objects FLAT. Not mountable, Not bootable. You ask for a key and it returns an object. Super scalable, can be accessed by tons of different instances.
+
+
+**How to know which storage type to use?**
+- Do you want to utilize storage to boot from? -> Block storage (EBS)
+
+- Do you want to utilize high performance storage INSIDE an O/S? -> Block storage (EBS)
+
+
+- Do you want to share a File System across multiple different servers/clients/services? -> File Storage (EFS)
+
+
+- Do you want to store files and access them by different instances? -> Object storage  (S3)
+
+
+## Storage performance
+**KEY TERMS**
+1. IO (block) size -> Size of the blocks data you are writing to disk (K, or MEG) E.g. if you storage block size is 16K and you write at 64K it will use 4 blocks.
+
+2. IOPS -> Speed (revolutions/s in an engine) Number of I/O operations a system can support in a second. (How many read or writes a disk or storage system can accomodate in a second) Certain media types area better at this, for example network storage can impact this a lot by high latency.
+
+3. Throughput -> End speed, rate of data a storage system can store in a partiocular piece of storage, either a physical disk or a volume (MB/s).(end speed of the car)
+
+
+Throughput = (IO size) x (IOPS)
+
+
+At the end of the day, you can have a high throughput set, but if your applications is not able to write at the same block size and same speed (IOPS) then you won't be able to get the maximum performance that your system provides, and vice-versa, if you have a fast application but you set up is not correct, then it will be limited by the hardware/netowrk
+
+
+![Storage Performance](../media/storage_performance.png)
+
+
+
+## Elastic Block Store (EBS)
+**Resiliency: AZ**
+
+- Can be enctypted using KMS
+
+- It is attached to one EC2 instance (or other service) over a storage network, it can be used by multiple EC2 instances but you need a cluster that manges read and writes so that they don't overwrite themselves.
+
+- They can be detached and reattached, not linked to the lifecycle of an instance.
+
+
+- You can create a copy of the EBS volume to S3 in a form of a snapshot. In this case data becomes Regional Resilient, this is useful to transfer data between AZs
+
+- Billed by GB/month metric.
+![EBS Architecture](../media/EBS_architecture.png)
+
+
