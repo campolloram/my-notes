@@ -1687,3 +1687,96 @@ At the end of the day, you can have a high throughput set, but if your applicati
 ![EBS Architecture](../media/EBS_architecture.png)
 
 
+
+## EBS Volume Types
+### GP2 (General Purpose)
+- Default general purpose SSD base storage
+- Small as 1GB or as large as 16 TB
+- Each volume receives an initial I/O credit balance of 5.4 million I/O credits, which is enough to sustain the maximum burst performance of 3,000 IOPS for at least 30 minutes.
+- Each credit I/O is of 16KiB
+- It gives you a base line IOPS and if you use more than that it will refill 3 times faster It can burst uap to 3,000 IOPS in case you need it.
+- The point here is to manage all of your credit buckets of all of your volumes.
+- Any EBS larger than 1,000GB will ALWAYS have their baseline equal to or exceeding the burst rate of 3,000 IOPS, so they will always have credits to achieve this maximum performance.
+
+This type of storage is currently the default, but will probably change to GP3 soon.
+
+It is used mainly for boot volumes, low-latency interactive apps, dev & test
+
+![GP2 Burst Bucket](../media/GP2_burst.png)
+
+### GP3
+- Newest storage type, it is also SSD based
+- Removes the credit bucket architecture of GP2 to something more simpler.
+- Every GP3 volume regardless of size starts with 3,000 IOPS & 125 MiB/s - STANDARD
+- Base price is 20% cheaper than GP2.
+- If you need more performance you can pay for up to 16,000 IOPS and 1,000 MiB/s of throughput
+
+The usage of GP3 is for:
+1. Virtual desktops
+2. Medium sized single instance DBs such as MSSQL Server and Oracle DB
+3. Low-latency interactve apps,
+dev & test
+4. Boot volumes
+
+
+### Provisioned IOPS SSD io1/2 and block express
+- This volumes have SUPER high performance.
+- Consistent low latency
+- Usually you use them on smaller volumes that need really good performance.
+
+
+![Provvisioned IOPS SSD](../media/provisioned_iops_ssd.png)
+
+
+### Hard Disk Drives (HDD)
+- Two types of HDD:
+1. st1 - Throughput Optimized (Used for Big Data) Is good for sequential access
+
+2. sc1 - Cold HDD -> Cheapeast storage, usually is for archiving
+
+![EBS HDD](../media/EBS_HDD.png)
+
+
+## Instance Store Volumes
+- Block Storage Devices
+- They are ephemeral, critical data should not live here.
+- Super high IOPS
+- Usually used as the basis of a FileSystem, similar to EBS, but local instead of being connected over the network
+- Physically connected to one EC2 Host
+- They are isolated to that one particular host
+- Instance on that host can access that volume
+- Since its physically connected it offers the Highest storage performance in AWS.
+- They are included in the price of the instance
+- Exam question: YOU NEE TO ATTACH THEM AT LAUNCH TIME ONLY, cannot be allocated afterwards.
+- The amount of volumes and capacity depends 100% on the instance type, some types may not even support store volumes.
+
+
+
+### EBS vs Instance Store
+
+- Persistence -> EBS
+- Resilience -> EBS
+- Storage isolated from instance lifecycle -> EBS
+- Super high performance (More than 260,000 IOPS)-> Instance store
+- Cost -> Instance Store (ST1 or SC1)
+- Throughput or streamng ST1
+- Boot ..... NOT ST1 or SC1
+- GP2/3 -> Up to 16,000 IOPS
+- IO1/2 up tp 64,000 IOPS (256,000 for IO block size)
+- EXAM question: You can create a RAID0 set which is a combined data storage (iop1/2, GP2/3) up tp 260,000 IOPS (This is the maximum performance an instance can give.)
+
+
+
+### EBS Snapshot
+- Snapshots are incremental volume copies to S3, this makes EBS Region resilient
+- Incremental volumes mean that the first snapshot is a full copy of your data, the next ones only store the difference between the previous snapshot and the state of the volume at time of execution.
+- Used for moving EBS volumes betweeen regions
+- Snaps restore lazily - fetched gradually
+- This can decrease performance since it will need to fetch from S3 data that has not been restored yet.
+- One way of solving this is by using Fast Snapshot Restore (FSR), this provied immediate restore
+- You can have up to 50 FSR per region and they are more expensive.
+- You can also achieve the same result by forcing a read of every block manually using DD or another tool in the O/S. This way you save on costs but brings more admin overhead.
+- You are billed by Gigabyter-month metric
+
+
+
