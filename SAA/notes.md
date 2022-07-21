@@ -1819,6 +1819,38 @@ An IP that is randomly allocated by AWS and might change due to stopping an inst
 - Exam question: If you attach an Elastic IP to an instance ENI, you will loose your regular Public IP address and replace it with the elastic one. AND YOU CAN GET THE PUBLIC ONE BACK!
 
 
+EXAM POWER UP:
+
+![EC2 Network Power Up](../media/EC2_Network_Power_UP.png)
+
+
+
+## Amazon Machine Image (AMI)
+- Can be used to launch EC2 instances
+- AWS or Community Provided
+- Marketplace (can include commercial software) (extra cost)
+- Regional .. unique ID e.g. ami-0a887e401f56493
+- Permissions (Public, Your Account, Specific Accounts)
+- You can create an AMI from an EC2 instance you want to template (this is so cool)
+
+
+**AMI Lifecycle**
+
+1. Launch -> You can add some volumes
+2. Configure -> You can customize for your needs
+3. Create Image -> Create your own AMI using that config (Snapshots are created from the volumes of the instace for other EC2 instances to use and it creates a Block Device Mapping to map the snapshot to the root of the volume e.g. /dev/xvdf)
+4. Launch 
+
+**Exam PowerUp**
+- AMI = One Region, only works in that one region
+- AMI Baking .. creating an AMI from a configured instance + application
+- An AMI can't be edited .. launch instanc, update config and make a new AMI
+- Can be copied between regions (including snapshots)
+- Remember permissions .. default = your account
+
+
+The cost of an AMI is the storage capacity used by the snapshots created for the volumes.
+
 
 
 
