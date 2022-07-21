@@ -1608,7 +1608,8 @@ Things influenced by the resource type:
 There are 5 main categories:
 1. **General Purposes** - Should be your default (even ratios on resources)
 2. **Compute Optimized** - Media processing, High performance Computing, Scientific Modelling, gaming, ML
-3. **Memory Optimized** - Processing large in-memory datasetsyou want to mount a volume in a file system
+3. **Memory Optimized** - Processing large in-memory datasets, some database workloads.
+4. **Accelerated Computing** - (niche) Hardware GPU, field programmble gate arrays (FPGAs)
 4. **Storage Optimized** - Sequential and Random IO - scale-out transactional databases, data warehousing, Elasticsearch, analytics workloads.
 
 ### Decoding EC2 Types
@@ -1777,6 +1778,47 @@ dev & test
 - You can have up to 50 FSR per region and they are more expensive.
 - You can also achieve the same result by forcing a read of every block manually using DD or another tool in the O/S. This way you save on costs but brings more admin overhead.
 - You are billed by Gigabyter-month metric
+
+
+### EBS Encryption
+- By default it does not encrypts data at rest
+- You can use a custom or the default aws/ebs KMS key for encrypting the data at rest
+- When encrypted only data in the memory of the host would not be encrypted
+- The key is stored right next to the EBS block and this key is encrypted by KMS
+- The key is stored by the EC2 Host for encrypting and decrypting data
+- each volume generates a new key
+- Snapshots use the same data encryption key that the volume
+- There isn't an AWS way to change a volume from encrypted to unencrypted (You need to do work arounds)
+- OS isnt aware of the encryption... no performance loss (The operation happens between the EC2 Host and the volume)
+
+![EBS Encryption](../media/EBS_encryption.png)
+
+
+### EC2 Network Interfaces (ENI)
+**LETS RECAP A LITTLE BIT**<br>
+**REMEMBER... <br>  Elastic IP  =>**<br> 
+An IP that you "buy" and pay to hold it, you can assign this IP to an EC2 instance and if the instance fails you can easily boot another one and reassign it to the new instance, this way you ALWAYS have the same IP<bR><br>
+
+**Public IP =>**<br> 
+An IP that is randomly allocated by AWS and might change due to stopping an instance or changing EC2 Hosts. 
+
+- Every EC2 instances has at least one ENI (Primary ENI)
+- You can attach more ENIs to the instance if you want to
+- The ENI is the one where the security group is attached to
+- It has 1 primary Private IPv4 IP
+- 0 or more secondary IPs
+- 0 or 1 Public IPv4 Address
+- 1 elastic IP per private IPv4 address
+- 0 or more IPv6 addresses (this are public by default)
+- Security groups
+- Source/Destination check (If enabled it will discard traffic that does not have any of the network IPs either as source or destination in a package)
+- The public IP is changed whenever you stop and start an instance (restarting does not change it)
+- You get a private DNS for the Private IP e.g. IP = 10.16.0.10 DNS = ip-10-16-0-10.ec2.internal
+- You also get a public DNS name for your public IP e.g. IP =3.89.7.136 DNS = ec2-3-89-7-136.compute-1.amazonaws.com
+- Internally the VPC resolves any traffic from the public DNS to the private IP, and outside the VPC it resolves it to the public IP. This is REALLY IMPORTANT since this simplifies the discoverability of your instances.
+- Exam question: If you attach an Elastic IP to an instance ENI, you will loose your regular Public IP address and replace it with the elastic one. AND YOU CAN GET THE PUBLIC ONE BACK!
+
+
 
 
 
