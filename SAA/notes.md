@@ -1843,7 +1843,7 @@ EXAM POWER UP:
 
 **Exam PowerUp**
 - AMI = One Region, only works in that one region
-- AMI Baking .. creating an AMI from a configured instance + application
+- "AMI Baking" .. creating an AMI from a configured instance + application
 - An AMI can't be edited .. launch instanc, update config and make a new AMI
 - Can be copied between regions (including snapshots)
 - Remember permissions .. default = your account
@@ -1852,5 +1852,46 @@ EXAM POWER UP:
 The cost of an AMI is the storage capacity used by the snapshots created for the volumes.
 
 
+### EC2 Purchase Options (Launch Types)
+**On-Demand**
 
+- What is it?
+
+Shared hardware, with defined allocation (multiple customers in shared hardware)
+
+- Pricing?
+
+Per second billing while instance is running. Associated resources such as storage is billed regardless of instance state.
+
+- When to use?
+Default purchase option, no interruption, no capacity reservation, predictable pricing, no discount, is good for short term workloads or unknown workloads.
+
+
+**Spot pricing**
+- What is it?
+
+Selling unused EC2 host capacity for up to 90% discount - the spot price is based on the spare capactiy at a given time. If your spot price you set is lower than the current spot price, AWS terminates your instances to free up the space for people paying the actual spot price or the on-demand fee. This makes this type of instances unreliable. 
+
+- Pricing?
+
+You pay whatever the spot price it is.
+
+- When to use?
+
+Things that are not time critical, anything which can be rerun. Bursty capacity needs like image or video processing.
+
+Cost sensitive workloads and anything which is stateless.
+
+
+**Reserved**
+- What is it?
+
+Commitmment made with AWS for long term consumption. You buy a reservation and as long as it matches the instance you get a price reduction or no cost at all, depending on the reservation. Unsued reservation are still billed.
+
+- Pricing?
+
+1. No upfront -> some savings for the agreeing to the term
+2. All upfront -> means no per second fee (the chepeast of all)
+3. Partial upfront -> Reduced per/s fee
+- When to use?
 
