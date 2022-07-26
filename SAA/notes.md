@@ -1882,16 +1882,100 @@ Things that are not time critical, anything which can be rerun. Bursty capacity 
 
 Cost sensitive workloads and anything which is stateless.
 
-
-**Reserved**
-- What is it?
-
-Commitmment made with AWS for long term consumption. You buy a reservation and as long as it matches the instance you get a price reduction or no cost at all, depending on the reservation. Unsued reservation are still billed.
-
+Instance Store
 - Pricing?
 
 1. No upfront -> some savings for the agreeing to the term
 2. All upfront -> means no per second fee (the chepeast of all)
 3. Partial upfront -> Reduced per/s fee
 - When to use?
+
+For any components in your infrastructure that can't tolerate interrumption and you require consistent usage.
+
+
+**Dedicated Host**
+- What is it?
+
+You pay for the host itself dedicated for some specific instance, it has a number of cores and cpus, memory, local storage as well as network connectivity.
+You pay for the host, there are no instance charges
+
+- Pricing?
+
+You pay for the host per second bill, any unused capactiy is your responsibility
+- When to use?
+
+If you have software that is licensed based on sockets or cores in a physical machine.
+
+
+
+**Dedicated Instances**
+- What is it?
+
+You dont own or share the host. You have extra charges for instances, but dedicated hardware.
+
+- Pricing?
+
+You pay the EC2 instancy fee plus an extra fee for the dedicated hardware
+- When to use?
+
+When you have really strict requirements where you cant share infrastructure.
+
+
+## More about reserved instances
+**Schedules Reserved Instances**
+- Great for long term usage which doesn;t run constantly e.g. batch processing daily for 5 hourtse starting at 23:00
+- You specify frequency duration and the time when it should run
+- You reserve the capacity and have a slight cheaper cost.
+- You need to purchase at least 1,200 hours per year and at least one year term.
+
+**Capacity Reservations**
+- You don't benefit at any cost reduction
+- You only reserve an on-demand capacity to ensure you always have access to capacity in an AZ when you need it, but at full on-demand price.
+
+
+**EC2 Savings plan**
+- A hourly commitment for a 1 or 3 year term.
+- You can make a reservation of general compute amounts ($20 per hour for 3 years) (you can save up to 66%)
+- You can also choose a specific EC2 Savings Plan - flexibility on size & O/S (you can save up to 72%)
+- The general compute plan works currently for EC2, Fargate and Lambda.
+- Products have an on-demand rate and savings plan rate.
+- Resource usage consumes savings plan commitment at the reduces saving plan rate.
+- Beyond your commitment ... on-demand is used.
+
+
+### Instance Status Check and Auto Recovery
+The status check has 2 tests to run before it is marked as running state.
+
+- The first status check is the system status
+
+A fail in this check can be related to:
+1. Loss of System Power
+2. Loss of network Connectivity
+3. Host software issues
+4. Host Hardware issues
+
+
+
+- The second status check is the instance status
+
+A fail in this check can be related to:
+1. A corrupted File System
+2. Incorrect networking
+3. OS Kernel issues
+
+
+If one of this checks fails you can manually stop the instance and start it again or you can ask EC2 to perform auto recovery, auto recovery moves the instance to a new host, starts it up with the exact config as before. (Only works with instances that have only EBS volumes attached, no instance store volumes)
+
+
+**Termination Protection**
+You can protect an EC2 instance of being accidentally terminated by activating termination protection setting. You could also give a certain group of people (more senior level) the ability to disable this and a group of jr developers the ability to terminate instnces, this way the Sr developers can protect vital instances and if a jr try to terminate it it will fail and he would need his Sr to deactivate it.
+
+
+### Horizontal Vs Vertical Scaling
+- Vertical scaling is just adding more resources to you instance the more load you get.
+
+- For horizontal scaling the most important part to keep in mind is to make the servers stateless by using an off-host database to store sessions (like a SQL db or Redis). If you store the sessions directly in the EC2 instance, they become stateful and whenever a client wants to come back to your site, it will loose his/her session.
+
+
+
 
