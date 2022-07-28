@@ -25,4 +25,19 @@ There are 3 different types of Operators
 - Not a data streaming solution neither a data processing framework. If you wanted to do that you will need to use spark operator for example and monitor that using airflow.
 
 
+## CLI commands
+### Airflow backfill
+Lets you backfill data from a start date to an end date. e.g.
+```
+airflow dags backfill -s 2021-01-01 -e 2021-01-05 --reset-dagruns
+```
 
+### Airflow Test
+This helps to see if your tasks work, by checking the dependencies, every time you add a new task to your dag is best practice to check if it works with this command. e.g.
+
+```
+airflow tasks test example_bash_operator runme_0 2020-01-01
+```
+example_bash_operator = The name of DAG
+
+runme_0 = The task id
