@@ -1859,3 +1859,33 @@ You can protect an EC2 instance of being accidentally terminated by activating t
 - Task Role -> are the best way for giving containers within ECS permissions to interact with other AWS services.
 - Service Definition -> How we want a task to scale, copies running, capacity, etc. You can even deploy a load balancer in front.
 - You deploy either tasks or services into an ECS cluster.
+
+### ECS Cluster Types
+**Common features**
+
+- Both clusters have:
+  1. ECS Management components:
+      - Scheduling and Orchestration
+      - CLuster Manager
+      - Placement engine
+
+**EC2 Mode**
+- Runs whitin a VPC so it is regional (has multiple AZ available)
+- It has an Auto Scaling Group to add and remove instances
+- It is not serverless since you still have the EC2 instances
+- Helpful when someone already has EC2 instances running but want to containerize their application
+
+
+**EC2 Fargate**
+- Serverless, since you don't have an actual EC2 instance
+- Task and Services are running inside a shared infrastructure platform and then they are injected to your VPC.
+- You only pay for the container resources you are using.
+
+
+#### When to use EC2, ECS (EC2) or Fargate?
+
+If you use container pick ECS:
+- Large workload and price conscious - EC2 Mode
+- Large workload, overhead conscious - Fargate
+- Small/Burst workloads - Fargate
+- Batch/Periodic workloads - Fargate
