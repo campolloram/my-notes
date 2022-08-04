@@ -41,3 +41,13 @@ airflow tasks test example_bash_operator runme_0 2020-01-01
 example_bash_operator = The name of DAG
 
 runme_0 = The task id
+
+
+# When developing...
+Always test your tasks individually to see if they work as intended.
+
+```
+airflow tasks test <your_dag_id> <your_task_id> 2022-01-01
+```
+
+You can configure connections using the web UI
