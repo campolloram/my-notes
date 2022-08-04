@@ -1889,3 +1889,26 @@ If you use container pick ECS:
 - Large workload, overhead conscious - Fargate
 - Small/Burst workloads - Fargate
 - Batch/Periodic workloads - Fargate
+
+## Advanced EC2
+### EC2 Bootstrapping
+
+- Bootstrap is a general term, in system automation, bootstrapping is a process that allows system to self configure or perform some self configuration steps. (software installations, etc.)
+
+- You can use User Data to do this bootstrapping, this data is accessed via the meta-data IP
+
+- ANYTHING in User Data is executed by the instance O/S ONLY AT LAUNCH TIME (not restarting)
+
+- EC2 doesnt interpret, the OS needs to understand the User Data.
+
+- If the bootstrap fails (User Data), the instance will still be in a running state, so you would not know by looking at the state of the instance.
+
+- User Data is NOT secure
+
+**AMI Baking or Bootstrapping?**
+
+- Usually you want to AMI bake all the installation processes (these are the ones that take most of the time) and leave only the configuration part as bootstrap (this way you have more control over the config)
+
+
+
+
