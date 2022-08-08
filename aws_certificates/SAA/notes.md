@@ -1910,5 +1910,17 @@ If you use container pick ECS:
 - Usually you want to AMI bake all the installation processes (these are the ones that take most of the time) and leave only the configuration part as bootstrap (this way you have more control over the config)
 
 
+### AWS::Cloudformation::Init
+Is a way to pass complex bootstrap instructions to an EC2 instance.
+
+- cfn-init helper script - installed on EC2 O/S
+- Simple config management system
+- Procedural (User Data) vs Desired State (cfn-init)
+- It makes sure Packages are installed, can create users and groups, can crate files with certain content and permissions, etc.
+- It is executed as any other command by being passed into the instance as part of the user data, it retrieves its directives from the cloudformation stack, the directive is **AWS::Cloudformation::Init**
+- It works with stack updates, so if you update your stack it will catch the changes and update the instances.
+- You can use cfn-signal to send a signal to AWS confirming that your userdata and AWS init ran correctly. You specify a timeout, so that if nothing happens in X amount of time, then Clouformation assumes is an error and wont complete the stack creation.
+
+
 
 
