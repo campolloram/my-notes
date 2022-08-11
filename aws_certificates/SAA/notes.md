@@ -1922,5 +1922,19 @@ Is a way to pass complex bootstrap instructions to an EC2 instance.
 - You can use cfn-signal to send a signal to AWS confirming that your userdata and AWS init ran correctly. You specify a timeout, so that if nothing happens in X amount of time, then Clouformation assumes is an error and wont complete the stack creation.
 
 
+### EC2 Instance Role & Instance Profile
+**ROLES ARE ALWAYS PREFERRED THAN STORING ACCESS KEYS INTO AN INSTANCE**
+
+Roles that an instance can assume and anything running in that instance have the permissions granted
+
+
+- There is an IAM Role and that IAM role has some permissions policies attached to id
+- Whoever assumes the role gets temporary credentials generated.
+
+- An instance profile is what gives the permissions to the applications inside the instance, this is generated automatically if you do thi in the UI, but if you are doing it declarative, you need to define them yourself
+
+- These permissions are delivered via the instance metadata (iam/security-credentials/role-name)
+
+- The credentials are automatically renewed, so as long as your application keep checking the metadata it will always have working creds.
 
 
