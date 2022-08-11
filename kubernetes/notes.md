@@ -70,3 +70,43 @@ Helps us run multiple instances of the same pod in the cluster, providing high a
 
 
 
+## Namespaces
+- Namespaces are a group of services. (like households)
+- YOU CAN ADD THE NAMESPACE IN THE YAML DEFINITION UNDER THE METADATA OF THE SERVICE
+- By default kubernetes creates 3 namespaces:
+1. kube-system -> Internal to kubernetes
+2. Default -> where your services go, unless you specify a new one
+3. kube-public -> Where resources that should be available to all public are published
+
+- Namespaces provide Isolation
+
+- You could even create namespaces for your dev, stage, etc.
+
+- Each namespaces have their own set of policies that define who can do what and also limit their resources.
+
+- The services inside a namespace can refer to each other by just using their names
+
+- For referring to services in other namespaces you use the following convention:
+
+```
+db-service.dev.svc.cluster.local
+```
+1. db-service = name of service
+2. dev = namespace name
+3. svc = service
+4. cluster.local = domain (literally the local cluster)
+
+## Quotas
+They are used to limit resources in a namespace
+
+
+---
+
+**PROTIP:** 
+
+You can use the --dry-run=client flag to just run the command without actually creating anything
+
+If you combine this with the -o yaml flag for formatting the output as yaml, you can easily create files for creating services. Check the commands on the useful-commands file by searching for generating quick files.
+
+---
+
