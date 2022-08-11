@@ -110,3 +110,28 @@ If you combine this with the -o yaml flag for formatting the output as yaml, you
 
 ---
 
+## Docker Pre-requisites
+- A docker container only runs as longs as there is a processs runninig in the container, if there is no process the container dies.
+ 
+
+- The differene betweeen CMD and Entrypoint is that CMD executes the command directly and entrypoint is a command where you specify the parameter when running the docker run command in the CLI
+
+e.g. 
+
+CMD -> sleep 5 (sleeps for 5 seconds)
+
+ENTRPOINT -> sleep (you then need to run the image by specifing the seconds like so... docker run image 10 )
+
+
+In a nutshell ENTRYPOINT appends the parameters and CMD replaces them.
+
+
+You can use CMD with ENTRYPOINT to sepcify a default value for the command
+
+e.g.
+
+ENTRYPOINT ["sleep"]
+
+CMD["5"]
+
+
