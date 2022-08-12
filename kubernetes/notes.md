@@ -114,13 +114,13 @@ If you combine this with the -o yaml flag for formatting the output as yaml, you
 - A docker container only runs as longs as there is a processs runninig in the container, if there is no process the container dies.
  
 
-- The differene betweeen CMD and Entrypoint is that CMD executes the command directly and entrypoint is a command where you specify the parameter when running the docker run command in the CLI
+- The differene betweeen CMD and ENTRYPOINT is that CMD executes the command directly and ENTRYPOINT is a command where you specify the parameter when running the docker run command in the CLI
 
 e.g. 
 
 CMD -> sleep 5 (sleeps for 5 seconds)
 
-ENTRPOINT -> sleep (you then need to run the image by specifing the seconds like so... docker run image 10 )
+ENTRYPOINT -> sleep (you then need to run the image by specifing the seconds like so... docker run image 10 )
 
 
 In a nutshell ENTRYPOINT appends the parameters and CMD replaces them.
@@ -134,4 +134,16 @@ ENTRYPOINT ["sleep"]
 
 CMD["5"]
 
+If not specified the 5 will be appended to the sleep command
 
+
+- You can use the args key in the containers spec section of the Pod definition to override the CMD of the container
+
+- You can the command key inside the container spec of the Pod definition to substitute the actual ENTRYPOINT in the container.
+
+
+--- 
+
+Quick Note: You can't edit directly some of the Pods attributes, but you can edit the Deployment and that will make sure to delete the Pod and raise a new one
+
+---
