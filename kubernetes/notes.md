@@ -147,3 +147,73 @@ If not specified the 5 will be appended to the sleep command
 Quick Note: You can't edit directly some of the Pods attributes, but you can edit the Deployment and that will make sure to delete the Pod and raise a new one
 
 ---
+
+
+### Config Maps, Secrets and Environment Vars
+You can type directly the env variables in your pod definition, but this can make your definition look messy. A better way to do this is to define a ConfigMap as a separate file and then inject the configmap into the pod definition.
+
+You can use the "envFrom" key inside spec followed by the "configMapRef" key and finally the "name" key to inject the configmap into a pod.
+
+```
+spec:
+  envFrom:
+    - configMapRef:
+        name: app-config
+```
+
+You can also inject Env vars using Volumes like so:
+
+```
+volumes:
+  - name: app-config-volume
+    configMap:
+      name: app-config
+```
+
+for using secrets we follow the following struct:
+
+```
+spec:
+  envFrom:
+    - secretRef:
+        name: app-secret
+```
+
+or as a file in a volume:
+
+```
+volumes:
+  - name: app-secret-volume
+    secret:
+      secretName: app-secret
+```
+
+If you use volume, each attribute in the secret is created as a file with the value of the secret as its content.
+
+
+You can enable encryption at rest for secrets so they are stored encrypted in ETCD
+
+### Service Accounts
+There are two types of accounts in kubernetes
+
+1. User accounts -> Used by humans (admin, developer, etc.)
+2. Service accounts ->  Account used by an applications used to interact with the kubernetes cluster.
+
+**Service Account**
+
+When a service account is created, it first creates the serviceaccount object and the generates a token and stores it in a secret object.
+
+The secret object is then linked to the service account.
+
+This token can then be used as an authenticator bearer token when making calls to the kubenetes API
+
+
+Each namespace has its own default service account.
+
+The default token is stored in the pod in the address:
+
+```
+/var/run/sercrets/kubernetes.io/serviceaccount
+```
+
+### Resource Requirements
