@@ -217,3 +217,20 @@ The default token is stored in the pod in the address:
 ```
 
 ### Resource Requirements
+- Resource Requests -> Minimum number of hardware required by the pod, by default it is .5CPU and 256Mi. You can modify them.
+
+- The pod cant consume more cpu than its limit, but it can consume more memory. When this happens constantly, the pod is terminated.
+
+### Taint and Tolerations
+You can create taints to block pods from being allocated to certain nodes. Then you can create tolerations so that only certain types of pods can be allocated to those nodes. This is way of creating "Dedicated resources" to ceratin tasks
+
+**Taints are set on nodes and tolerations are set on Pods**
+
+- There are 3 taint effects:
+1. NoSchedule -> No pods are going to be schedule in that node unless they have the toleration
+2. PreferNoSchedule -> It will try to not schedule pods that are untolerant.
+3. NoExecute -> It will not schedule untolerant pods + it will exit existing pods that are untolerant.
+
+
+
+
