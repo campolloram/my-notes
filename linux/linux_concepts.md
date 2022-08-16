@@ -30,4 +30,4 @@
 
 - **/usr/** -> Contains files related to users such as application files and related library files ("usr" is an acronym that stands for UNIX system resources).
 
-- **/var/** -> (as in "variable") holds files and directories that are constantly changing such as printer spools and log files
+- **/var/** -> (as in "variable") holds files and directories that are constantly changing such as printer spools and log files.
