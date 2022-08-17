@@ -1938,3 +1938,26 @@ Roles that an instance can assume and anything running in that instance have the
 - The credentials are automatically renewed, so as long as your application keep checking the metadata it will always have working creds.
 
 
+### System Manager (SSM) Parameter Store
+- Lets you create key value pairs for config and secrets
+- It lets you store 3 diff types of parameters:
+1. String
+2. StringList
+3. SecureString
+
+- You can store license codes, database strings, passwords, etc.
+
+- Also lets you store parametes with versioning and hierarchies (by hierarchies we mean kind of like a file system e.g. /wordpress/DBUser)
+
+- You can store plaintext or ciphertext (integrated with KMS)
+
+- It can be used by EC2 instancs, applications running inside of them or even Lambda functions.
+
+
+### System and Application Logging on EC2
+- The inside of an EC2 instance is not logged by cloudwatch by default.
+
+- You need a cloudwatch agent to log the data of your applications.
+
+- The agent needs some config, for example, which logs to extract as well as some permissions.
+
