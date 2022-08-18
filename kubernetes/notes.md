@@ -269,15 +269,17 @@ These type of Pods have more than 1 container. The benefits of doing this is tha
 - This can be useful to wait for another service that is needed to be up and running or to get some data into a volume before booting the application (container).
 
 ### Node Selectors
+
 You can use node selectors to make a pod land on a specific node. This is useful when you have a cluster with different types of nodes. Maybe one node has more RAM and GPU for data processing, by using node selectors you can force your data processing tasks (Pods) to land there.
 
 - It works by labeling the node e.g. size: large
-- Then you add the key ```nodeSelector``` in your spec definition of your Pod to point to the label you defined in the node.
+- Then you add the key `nodeSelector` in your spec definition of your Pod to point to the label you defined in the node.
 
 ### Node Affinity
+
 Its primary purpose is to ensure that Pods are hosted in particular nodes.
 
-The main difference with node selectors is that node affinity provides us with advanced capabilities to limit pod placement. It lets you use operators like IN (OR), EXISTS, etc. 
+The main difference with node selectors is that node affinity provides us with advanced capabilities to limit pod placement. It lets you use operators like IN (OR), EXISTS, etc.
 
 e.g. place this pod in any type of node except small.
 
@@ -296,15 +298,15 @@ affinity:
 ```
 
 Node affinity types:
+
 1. requiredDuringSchedulingIgnoredDuringExecution
 2. preferredDuringSchedulingIgnoredDuringExecution
 3. requiredDuringSchedulingRequiredDuringExecution
 
-
 Using preferred means that in case there are no matches for the specification, instead of not scheduling the task. The task will be scheduled in another type of node.
 
-
 ## Readiness Probes
+
 By default kubernetes believes an application is ready as long as the container is running. You need to configure a readiness probe or test to see if the application responds and then it marks it as ready.
 
 - You use the built in http, tcp or command readinessProbe
@@ -312,14 +314,14 @@ By default kubernetes believes an application is ready as long as the container 
 - You can set a inital delay so that it waits for the app to boot
 - You can alse set the periodicity of the checks (e.g. every 10 seconds)
 
-
 ## Liveness Probe
+
 Periodically tests if the application within the container is healthy (you define this condition)
 
 If the Pod fails to pass the liveness probe, kubernetes will destroy it
 
-
 ## Logging
+
 You can view the logs of a container inside a Pod by running
 
 ```
@@ -328,13 +330,15 @@ kubectl logs -f <pod_name> <container_name>
 ```
 
 ## Monitoring
+
 As of today Kubernetes does not come with a built-in monitoring solution. But there are a lot of open-source solutions available like:
+
 1. Metrics Server
 2. Prometheus
 3. Elastik Stack
 
-
 ### Metric Server
+
 You have one metric server for each cluster
 
 - It is an in memory monitoring solution, so the data does not persist and it is not useful for historical performance data, for that use another solution
@@ -344,6 +348,7 @@ You have one metric server for each cluster
 - cAdvisor is responsible for retrieveing performance metrics from pods and exposing them through the kubelete API.
 
 The following CLI commands can be used to display the data:
+
 ```
 # Shows each node CPU and Memory consumption
 kubectl top node
@@ -351,3 +356,9 @@ kubectl top node
 # Same as top node but for pods
 kubectl top pod
 ```
+
+## Rolling updates and Rollbacks in Deployments
+
+Kubernetes creates a revision by doing a rollout, for deploying the new revision it does a rolling update in which slowly takes older version nodes and updates them.
+
+- Kubernetes deployments allow you to rollback to a previous revision
