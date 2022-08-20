@@ -54,7 +54,7 @@ There are two different types of users in AWS. You are either the account owner 
 
 1. Users -> Humans or applications that need access to your account
 2. Groups -> Collection of related users (development team, finance, HR)
-3. Roles -> Can be used by AWS Services or to grant external access to your account
+they3. Roles -> Can be used by AWS Services or to grant external access to your account
 
 The difference between users and roles is that a user is attached to a specific application or human and the role is like a blueprint you can use for any number of services (like a bunch of EC2 instances or an external application trying to use an S3 bucket)
 
@@ -2022,4 +2022,33 @@ There are currently 3 types of placement groups:
 **EBS Optimized**
 - Dedicated capacity for EBS
 - Most instances support and have enabled by default (do not worry about it)
+
+
+
+# Route 53 - Global DNS
+## R53 Hosted Zones
+- Globally resilient service
+- There are two type of hosted zones in AWS:
+  1. Public
+  2. Private
+- Created automatically when you register a domain using R53
+- Can also be created separately if you want to register a domain elsewhere and use R53 to host it.
+- There is a monthly fee to host each hosted zone and a fee for the queries made to that hosted zone.
+- A hosted zone is a DNS DB for a domain e.g. animals4life.org
+- These zones either public or private are used to host DNS records. (types of records: A, AAAA, MX, NS, TXT)
+
+### Public Hosted Zone
+- It is a DNS Database (a zone file) hosted by R53 in Public Name Servers.
+- This makes it accessible from the public ianternet & VPCs
+- Hosted on "4" R53 Name servers (NS) specific for the zone, and it's in those nameservers where the zone file is hosted.
+- Use "NS Records" to point at these NS (connect to global DNS)
+
+
+How does it work? 
+
+![R53 public hosted zone](../media/public_hosteed_zone.PNG)
+- In the previouse image we can see that for connecting an application inside our VPC to our server using DNS, it can ask the VPC+2 address which is connected to the R53 resolver.
+
+- If the connection is from the public internet, then the SP queries the rootservers which query the top level domain (.org) and inside the top level domain theres gonna be 4 NS records pointing to our 4 Nameservers provided by R53.
+
 
