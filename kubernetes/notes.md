@@ -362,3 +362,10 @@ kubectl top pod
 Kubernetes creates a revision by doing a rollout, for deploying the new revision it does a rolling update in which slowly takes older version nodes and updates them.
 
 - Kubernetes deployments allow you to rollback to a previous revision
+
+
+## Jobs and Cronjobs
+Just like we use Replicasets that helps us create a defined number of pods and mantain them alive. We can use Jobs to create a number of pods that are running a job, the main difference here is that the process will finish eventually, we just need the process to complete and then do not raise the pods again.
+
+- For creating a crontjob use the kind CronJob, under spec you can specify the schedule and that's it.
+
