@@ -1961,3 +1961,65 @@ Roles that an instance can assume and anything running in that instance have the
 
 - The agent needs some config, for example, which logs to extract as well as some permissions.
 
+
+
+### EC2 Placemente Groups
+This feature allows you to influence the placement of your application in EC2, making them close together or not.
+
+There are currently 3 types of placement groups:
+1. Cluster -> Pack instances close together
+2. Spread -> Keep instances separated
+3. Partition -> Groups of instances spread apart
+
+
+**Cluster Placement**
+- Use this for any type of workload that requires performance, fast speed or low latency.
+
+- You use this to achieve the absolute best performance level in EC2.
+
+- Best practice is to use the same type of instance as well as launching all of them at the same type.
+
+- They will all be placed in the same AZ
+
+- The main purpose if to have all of your apps in the same rack and sometimes even the same host. This provides great bandwith.
+
+- They have the lowest latency and max PPS (packets per second) possible in AWS
+
+- 10Gbps p/stream when normally is 5Gbps
+
+
+**Spread Placement**
+- Ensures maximum amount of availability and resilience for an application.
+
+- Instances are located on separate isolated racks. (infrastructure isolation)
+
+- Limit of 7 instances per AZ.
+
+**Partition Placement**
+- Usually you will use this when replicating data for example, since you need to group the replicas by their partition.
+
+- Similar to spread, but here you have 7 partitions per AZ and you decide how many applications to launch on each partition (You can define this manually or let AWS decide)
+
+- This way you can launch more than 7 apps in one AZ, but some of them will be sharing Partition.
+
+
+## EC2 Dedicated Hosts
+- EC2 Host dedicated to you
+- You pay for the host itself which is dedicated for certain instance types
+- No instances charges
+- Can be payed On-Demand or reserved options available
+- Host hardware has physical sockets and cores
+- If the host uses the nitro virtualization platform you can mix between different sizes (e.g. 1xlarge, 4xmedium, 2xlarge), if not you need to launch all the instances of the same size (e.g. 16xmedium, 8xlarge, etc.)
+
+
+
+## Enhanced Networking and EBS Optimized
+**Enhanced Networking**
+- Uses a technique called SR-IOV (single root I/O virtulization), makes it so that the physical network interface is aware of virtualization (way faster since its done via hardware)
+- More bandwidth, higher I/O, low latency, lower host CPU usage
+- It is available for no charge in newer instances.
+
+**EBS Optimized**
+- Dedicated capacity for EBS
+- Most instances support and have enabled by default (do not worry about it)
+
