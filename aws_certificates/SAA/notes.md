@@ -2052,3 +2052,65 @@ How does it work?
 - If the connection is from the public internet, then the SP queries the rootservers which query the top level domain (.org) and inside the top level domain theres gonna be 4 NS records pointing to our 4 Nameservers provided by R53.
 
 
+### Private Hosted Zone
+- Associated only with VPCs, and only accessible in those VPCs.
+- You can have overlapping public and private zones to create a split-view.
+- In a split-view you can have different logic to treat people accessing your DNS from outside or from within.
+
+
+The below image shows how the private zone can only be accessed by associated VPCs
+![Private Hosted Zone](../media/private_hosted_zone.PNG)
+
+The below image shows a split view, where the access to the accounting section is only granted to the queries coming from the private zone.
+![Split View](../media/split_view_zones.PNG)
+
+
+### CNAME vs. ALIAS
+- An "A" record maps a NAME to an IP Address
+- CNAME maps a NAME to another NAME e.g. www.catagram.io -> catagram.io
+- Exam tip: You can't create a CNAME for naked/apex (catagram.io)
+- Many AWS services use a DNS Names, like Elastic Load Balancer, here using CNAMEs would not work since you can't make catagram.io point to the load balancer since its the apex domain.
+- For this issue you can use ALIAS records, ALIAS records map a name to an AWS resource. (ALIAS records are AWS specific. Do not exist in the usual DNS standard.)
+- For naked/apex domains you NEED to use ALIAS to point to another AWS resource.
+- Exam tip: For AWS Services - default to picking ALIAS over CNAMEs
+- You can only use ALIAS records if R53 is hosting your domain.
+
+
+### R53 Simple Routing
+- Starts with a hosted zone
+- DOES NOT support health checks
+- Returns all the values for a record in random oder.
+![Simple Routing](../media/simple_routing.PNG)
+
+
+
+### R53 Health Checks
+- Health checks are sperate from, but used by records.
+- Health checkers located globally.
+- Occur every 30s by default but can be increased for a cost.
+- TCP. HHTP/HTTPS, HTTP/HTTPS string match (the response must contain a the string in the body) tests.
+- An endpoint is either healthy or unhealthy
+- You can have 3 different checks:
+  1. Endpoint checks
+  2. Cloudwatch Alarm
+  3. Checks of checks (calculated)
+
+- If 18%+ health checkers report as healthy, the health check is healthy.
+
+### R53 Failover Routing
+- You can configure two records, one is the primary and is where R53 will route requests if the health check is healthy, you can also configure a secondry record to do a failover routing, and this is where requests will arrive whenever the health is unhealthy.
+
+
+### R53 Multivalue Routing
+- Is like a mixture of simple and failover routing.
+- You start with a hosted zone. You can create many records with the same name.
+- It will return 8 healthy records to the client
+- It helps to improve availability.
+- It IS NOT a replacement for a Load Balancer.
+
+
+### R53 Weighted Routing
+- Used when you are looking for a simple form of load balancer, or for testing new software (only send 5% of requests to the software with an update).
+- Starts in a hosted zone with some records configured. You can specify a weight for each record (40%, 40%, 20%)
+- Each record is returned depending of their weight. So for our example record1 gets returned 40% of the time, record2 40% and record3 20%
+
