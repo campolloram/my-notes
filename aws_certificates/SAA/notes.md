@@ -2114,3 +2114,63 @@ The below image shows a split view, where the access to the accounting section i
 - Starts in a hosted zone with some records configured. You can specify a weight for each record (40%, 40%, 20%)
 - Each record is returned depending of their weight. So for our example record1 gets returned 40% of the time, record2 40% and record3 20%
 
+### R53 Latency based routing
+- Exam question: This is used to optimize for performance and user experience
+- You can create records pointing to sepcific AWS Regions
+- You can have at most one record with the same name in each region.
+- This can be combined with health checks to return the healthiest lowest latency record.
+- Used for global infrastructure.
+
+
+### R53 Geolocation Routing
+- Similar to latency, but instead it is used the location for deciding which record to return
+- The geolocation is used by taggin the records with either a country, a continent or a US State.
+- AWS does an IP check to see the location of the user. Using this it returns the matching records. It starts by checking the state if it is in the U.S, then the country and lastly the continent.
+- You can define a default record if there is no match for a user.
+- This is useful for dividing content. For example something U.S only
+
+### R53 Geoproximity Routing
+- Provides records as close to your customer, you can provide coordinates or the region
+- Similar to the latency, but instead of using lowest latency, but this one works on distance
+- You can create a bias to expand or decrease region size.
+
+
+### R53 Interoperability
+- R53 normally has 2 jobs:
+  1. Domain registrar
+  2. Domain Hosting
+
+- R53 can do BOTH or either one of the jobs
+
+- Registrar -> Communicates with the registry of the Top Level Domain and assigns your name servers
+- Hosting -> Allocates 4 Name SErvers (NS) and creates a zone file on the Name Servers.
+
+- Usually if R53 is not doing both things, it will be the registrar somewhere else (e.g. GoDaddy) and the hosting on R53, since the hosting part is what gives the most functionality.
+
+
+# Relational Database Service (RDS)
+### Wide column Store (DynamoDB)
+- A wide-column store is like a 2-dimensional key-value store, where the first key is used as a row identifier and the second is used as a column identifier.
+- The combination of keys needs to be unique
+- It is very fast and scalable
+
+
+### Document Database ()
+- Like a key-value store, but you can interact with the values of the JSON/HTML/etc associated to the key.
+- The ideal scenarios are when you need to interact with whole documents or deep attributes. (catalogs, user profiles)
+- Useful where the content is unique, but it changes over time.
+
+
+### Row Store Databases (MySQL)
+- Ideal when you are operating on rows (OLTP)
+- It stores the data as rows
+- It is slow when it comes to analysis that need a bunch of rows.
+
+### Column Database (Redshift)
+- Useful when you need to retrieve a big amount of rows, on just a set of your columns, maybe for analysis. (OLAP)
+- Stores the data as columns, instead of row.
+
+### Graph Databases
+- Relationships between things are formerly defines and stored in the database itself along with the data, they are not calculated.
+- It works with nodes and edges. Nodes is the actual data, edges store the relationship and direction of different nodes (e.g. work_for, lives_in)
+
