@@ -428,3 +428,6 @@ IP:PORT/buy
 But since the application does not recognize /buy or /watch as the root it is not going to land on your home page. For this you use rewrite so that the application only receives "/" instead of "/watch" or "/buy". That way the endpoints are only relevant to the load balancer.
 
 ## Network Policies
+
+- By defualt all Pods can communicate between each other within the kubernetes cluster
+- You can create netowrk policies to deny communication to a specifc application (e.g. Only allow Ingress traffic from API pod on port 3306)
