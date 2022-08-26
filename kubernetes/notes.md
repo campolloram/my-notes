@@ -363,30 +363,30 @@ Kubernetes creates a revision by doing a rollout, for deploying the new revision
 
 - Kubernetes deployments allow you to rollback to a previous revision
 
-
 ## Jobs and Cronjobs
+
 Just like we use Replicasets that helps us create a defined number of pods and mantain them alive. We can use Jobs to create a number of pods that are running a job, the main difference here is that the process will finish eventually, we just need the process to complete and then do not raise the pods again.
 
 - For creating a crontjob use the kind CronJob, under spec you can specify the schedule and that's it.
 
-
 # Services and Networking
+
 Services lets us connect application together with other applications or users.
 
 - A kubernetes service is an object just like a Pod.
 - There are 4 different types of services in kubernetes:
+
   1. Cluster IP -> Standard form of service. It is only within the kubernetes cluster. It is used to group pods together. (A service for your backend, another one for your frontend, etc.)
   2. NodePort -> It is an open port in the node.
   3. LoadBalancer -> Popular way to introduce kubernetes to the outside world. The cluster will approach the cloud provider and build a load balancer.
 
   4. ExternalName -> Used to redirect traffic to an outsides service. It completes this by returning the record value of a CNAME.
 
-
 You can use selectors inside the spec definition of a service to only access those applications that match the selection. (in case you have more than 1 app running on your cluster)
 
-
 ## Ingress Networking
-- When you have more than one application, regular loadbalancer service starts to become more difficult to manage since you will need to configure one load balancer for each service and then configure a proxy server to send the requests to the correct load balancer depending the port, as well as handling SSL encryption  etc.
+
+- When you have more than one application, regular loadbalancer service starts to become more difficult to manage since you will need to configure one load balancer for each service and then configure a proxy server to send the requests to the correct load balancer depending the port, as well as handling SSL encryption etc.
 
 - Ingress abstract all the logic required for configuring all of this in yet another YAML file, easy to implement and with little to not admin overhead.
 
@@ -401,14 +401,15 @@ You can use selectors inside the spec definition of a service to only access tho
 
 - You need to create a ServiceAccount object with the correct roles and bindings for the ingress controller to function correctly.
 
-At the end for an ingress controller to work you will need at least:  
-  1. Deployment file for the load balancer.
-  2. A Service file for the NodePort.
-  3. A ConfigMap for the load balancer.
-  4. A ServiceAccount for providing access to the controller.
+At the end for an ingress controller to work you will need at least:
 
+1. Deployment file for the load balancer.
+2. A Service file for the NodePort.
+3. A ConfigMap for the load balancer.
+4. A ServiceAccount for providing access to the controller.
 
 ## Ingress Resource
+
 - It is created with a definition file of kind Ingress
 - Here you can specify in the backend section the service names and the ports where you want to redirect.
 - You can create rules for routing traffic depending of the DNS. Then inside the rules you have different paths that you can configure to send to different applications.
@@ -425,3 +426,5 @@ IP:PORT/watch
 IP:PORT/buy
 
 But since the application does not recognize /buy or /watch as the root it is not going to land on your home page. For this you use rewrite so that the application only receives "/" instead of "/watch" or "/buy". That way the endpoints are only relevant to the load balancer.
+
+## Network Policies
