@@ -2174,3 +2174,44 @@ The below image shows a split view, where the access to the accounting section i
 - Relationships between things are formerly defines and stored in the database itself along with the data, they are not calculated.
 - It works with nodes and edges. Nodes is the actual data, edges store the relationship and direction of different nodes (e.g. work_for, lives_in)
 
+## ACID vs. BASE
+- They are both DB transaction models
+- CAP Theorem - Consistency, Availability and Partition Tolerant (resilience) - Choose 2 :)
+  1. Consistency - Any read from the DB will get the latest Write or an error.
+  2. Availability - Every request will receive a non error response BUT without a guarantee for the most recent write
+  3. System can be made of multiple network partitions and continues to operate even if there are error between these nodes.
+
+- CAP Theorem states that any DB product is only able to provide 2 of these 3 factors.
+
+
+- ACID = Consistency
+- BASE = Availability
+
+### ACID (Atomic, Consistent, Isolated, Durable)
+![ACID Transactions](../media/ACID_transactions.PNG)
+- Usually RDS (SQL)
+- ACID limits the ability to scale
+
+### BASE (Basically Available, Soft State, Eventually Consistent)
+![BASE Transactions](../media/BASE_transactions.PNG)
+- Usually NoSQL (DynamoDB)
+- Easy to scale
+
+
+## Databases on EC2 (Bad Practice)
+**Why might you do it...**
+- You need OS level access in the DB instance
+- Advanced DB Option tuning... (DBROOT)
+- DB or DB versions that AWS do not provide
+- Vendor demands...
+- Specific OS/DB Combination
+
+
+**Why you should not...**
+- Admin Overhead - managing EC2 and DBHost
+- Backup / Disaster Recovery Management
+- EC2 is single AZ (Also EBS)
+- Features - some of AWS DB products are amazing
+- No easy scaling, can't be serverless
+- Replication
+- Performance
