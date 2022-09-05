@@ -54,7 +54,7 @@ There are two different types of users in AWS. You are either the account owner 
 
 1. Users -> Humans or applications that need access to your account
 2. Groups -> Collection of related users (development team, finance, HR)
-they3. Roles -> Can be used by AWS Services or to grant external access to your account
+   they3. Roles -> Can be used by AWS Services or to grant external access to your account
 
 The difference between users and roles is that a user is attached to a specific application or human and the role is like a blueprint you can use for any number of services (like a bunch of EC2 instances or an external application trying to use an S3 bucket)
 
@@ -1861,36 +1861,39 @@ You can protect an EC2 instance of being accidentally terminated by activating t
 - You deploy either tasks or services into an ECS cluster.
 
 ### ECS Cluster Types
+
 **Common features**
 
 - Both clusters have:
   1. ECS Management components:
-      - Scheduling and Orchestration
-      - CLuster Manager
-      - Placement engine
+     - Scheduling and Orchestration
+     - CLuster Manager
+     - Placement engine
 
 **EC2 Mode**
+
 - Runs whitin a VPC so it is regional (has multiple AZ available)
 - It has an Auto Scaling Group to add and remove instances
 - It is not serverless since you still have the EC2 instances
 - Helpful when someone already has EC2 instances running but want to containerize their application
 
-
 **EC2 Fargate**
+
 - Serverless, since you don't have an actual EC2 instance
 - Task and Services are running inside a shared infrastructure platform and then they are injected to your VPC.
 - You only pay for the container resources you are using.
 
-
 #### When to use EC2, ECS (EC2) or Fargate?
 
 If you use container pick ECS:
+
 - Large workload and price conscious - EC2 Mode
 - Large workload, overhead conscious - Fargate
 - Small/Burst workloads - Fargate
 - Batch/Periodic workloads - Fargate
 
 ## Advanced EC2
+
 ### EC2 Bootstrapping
 
 - Bootstrap is a general term, in system automation, bootstrapping is a process that allows system to self configure or perform some self configuration steps. (software installations, etc.)
@@ -1909,8 +1912,8 @@ If you use container pick ECS:
 
 - Usually you want to AMI bake all the installation processes (these are the ones that take most of the time) and leave only the configuration part as bootstrap (this way you have more control over the config)
 
-
 ### AWS::Cloudformation::Init
+
 Is a way to pass complex bootstrap instructions to an EC2 instance.
 
 - cfn-init helper script - installed on EC2 O/S
@@ -1921,12 +1924,11 @@ Is a way to pass complex bootstrap instructions to an EC2 instance.
 - It works with stack updates, so if you update your stack it will catch the changes and update the instances.
 - You can use cfn-signal to send a signal to AWS confirming that your userdata and AWS init ran correctly. You specify a timeout, so that if nothing happens in X amount of time, then Clouformation assumes is an error and wont complete the stack creation.
 
-
 ### EC2 Instance Role & Instance Profile
+
 **ROLES ARE ALWAYS PREFERRED THAN STORING ACCESS KEYS INTO AN INSTANCE**
 
 Roles that an instance can assume and anything running in that instance have the permissions granted
-
 
 - There is an IAM Role and that IAM role has some permissions policies attached to id
 - Whoever assumes the role gets temporary credentials generated.
@@ -1937,10 +1939,11 @@ Roles that an instance can assume and anything running in that instance have the
 
 - The credentials are automatically renewed, so as long as your application keep checking the metadata it will always have working creds.
 
-
 ### System Manager (SSM) Parameter Store
+
 - Lets you create key value pairs for config and secrets
 - It lets you store 3 diff types of parameters:
+
 1. String
 2. StringList
 3. SecureString
@@ -1953,26 +1956,26 @@ Roles that an instance can assume and anything running in that instance have the
 
 - It can be used by EC2 instancs, applications running inside of them or even Lambda functions.
 
-
 ### System and Application Logging on EC2
+
 - The inside of an EC2 instance is not logged by cloudwatch by default.
 
 - You need a cloudwatch agent to log the data of your applications.
 
 - The agent needs some config, for example, which logs to extract as well as some permissions.
 
-
-
 ### EC2 Placemente Groups
+
 This feature allows you to influence the placement of your application in EC2, making them close together or not.
 
 There are currently 3 types of placement groups:
+
 1. Cluster -> Pack instances close together
 2. Spread -> Keep instances separated
 3. Partition -> Groups of instances spread apart
 
-
 **Cluster Placement**
+
 - Use this for any type of workload that requires performance, fast speed or low latency.
 
 - You use this to achieve the absolute best performance level in EC2.
@@ -1987,8 +1990,8 @@ There are currently 3 types of placement groups:
 
 - 10Gbps p/stream when normally is 5Gbps
 
-
 **Spread Placement**
+
 - Ensures maximum amount of availability and resilience for an application.
 
 - Instances are located on separate isolated racks. (infrastructure isolation)
@@ -1996,14 +1999,15 @@ There are currently 3 types of placement groups:
 - Limit of 7 instances per AZ.
 
 **Partition Placement**
+
 - Usually you will use this when replicating data for example, since you need to group the replicas by their partition.
 
 - Similar to spread, but here you have 7 partitions per AZ and you decide how many applications to launch on each partition (You can define this manually or let AWS decide)
 
 - This way you can launch more than 7 apps in one AZ, but some of them will be sharing Partition.
 
-
 ## EC2 Dedicated Hosts
+
 - EC2 Host dedicated to you
 - You pay for the host itself which is dedicated for certain instance types
 - No instances charges
@@ -2011,22 +2015,23 @@ There are currently 3 types of placement groups:
 - Host hardware has physical sockets and cores
 - If the host uses the nitro virtualization platform you can mix between different sizes (e.g. 1xlarge, 4xmedium, 2xlarge), if not you need to launch all the instances of the same size (e.g. 16xmedium, 8xlarge, etc.)
 
-
-
 ## Enhanced Networking and EBS Optimized
+
 **Enhanced Networking**
+
 - Uses a technique called SR-IOV (single root I/O virtulization), makes it so that the physical network interface is aware of virtualization (way faster since its done via hardware)
 - More bandwidth, higher I/O, low latency, lower host CPU usage
 - It is available for no charge in newer instances.
 
 **EBS Optimized**
+
 - Dedicated capacity for EBS
 - Most instances support and have enabled by default (do not worry about it)
 
-
-
 # Route 53 - Global DNS
+
 ## R53 Hosted Zones
+
 - Globally resilient service
 - There are two type of hosted zones in AWS:
   1. Public
@@ -2038,25 +2043,25 @@ There are currently 3 types of placement groups:
 - These zones either public or private are used to host DNS records. (types of records: A, AAAA, MX, NS, TXT)
 
 ### Public Hosted Zone
+
 - It is a DNS Database (a zone file) hosted by R53 in Public Name Servers.
 - This makes it accessible from the public ianternet & VPCs
 - Hosted on "4" R53 Name servers (NS) specific for the zone, and it's in those nameservers where the zone file is hosted.
 - Use "NS Records" to point at these NS (connect to global DNS)
 
-
-How does it work? 
+How does it work?
 
 ![R53 public hosted zone](../media/public_hosteed_zone.PNG)
+
 - In the previouse image we can see that for connecting an application inside our VPC to our server using DNS, it can ask the VPC+2 address which is connected to the R53 resolver.
 
 - If the connection is from the public internet, then the SP queries the rootservers which query the top level domain (.org) and inside the top level domain theres gonna be 4 NS records pointing to our 4 Nameservers provided by R53.
 
-
 ### Private Hosted Zone
+
 - Associated only with VPCs, and only accessible in those VPCs.
 - You can have overlapping public and private zones to create a split-view.
 - In a split-view you can have different logic to treat people accessing your DNS from outside or from within.
-
 
 The below image shows how the private zone can only be accessed by associated VPCs
 ![Private Hosted Zone](../media/private_hosted_zone.PNG)
@@ -2064,8 +2069,8 @@ The below image shows how the private zone can only be accessed by associated VP
 The below image shows a split view, where the access to the accounting section is only granted to the queries coming from the private zone.
 ![Split View](../media/split_view_zones.PNG)
 
-
 ### CNAME vs. ALIAS
+
 - An "A" record maps a NAME to an IP Address
 - CNAME maps a NAME to another NAME e.g. www.catagram.io -> catagram.io
 - Exam tip: You can't create a CNAME for naked/apex (catagram.io)
@@ -2075,22 +2080,22 @@ The below image shows a split view, where the access to the accounting section i
 - Exam tip: For AWS Services - default to picking ALIAS over CNAMEs
 - You can only use ALIAS records if R53 is hosting your domain.
 
-
 ### R53 Simple Routing
+
 - Starts with a hosted zone
 - DOES NOT support health checks
 - Returns all the values for a record in random oder.
-![Simple Routing](../media/simple_routing.PNG)
-
-
+  ![Simple Routing](../media/simple_routing.PNG)
 
 ### R53 Health Checks
+
 - Health checks are sperate from, but used by records.
 - Health checkers located globally.
 - Occur every 30s by default but can be increased for a cost.
 - TCP. HHTP/HTTPS, HTTP/HTTPS string match (the response must contain a the string in the body) tests.
 - An endpoint is either healthy or unhealthy
 - You can have 3 different checks:
+
   1. Endpoint checks
   2. Cloudwatch Alarm
   3. Checks of checks (calculated)
@@ -2098,31 +2103,33 @@ The below image shows a split view, where the access to the accounting section i
 - If 18%+ health checkers report as healthy, the health check is healthy.
 
 ### R53 Failover Routing
+
 - You can configure two records, one is the primary and is where R53 will route requests if the health check is healthy, you can also configure a secondry record to do a failover routing, and this is where requests will arrive whenever the health is unhealthy.
 
-
 ### R53 Multivalue Routing
+
 - Is like a mixture of simple and failover routing.
 - You start with a hosted zone. You can create many records with the same name.
 - It will return 8 healthy records to the client
 - It helps to improve availability.
 - It IS NOT a replacement for a Load Balancer.
 
-
 ### R53 Weighted Routing
+
 - Used when you are looking for a simple form of load balancer, or for testing new software (only send 5% of requests to the software with an update).
 - Starts in a hosted zone with some records configured. You can specify a weight for each record (40%, 40%, 20%)
 - Each record is returned depending of their weight. So for our example record1 gets returned 40% of the time, record2 40% and record3 20%
 
 ### R53 Latency based routing
+
 - Exam question: This is used to optimize for performance and user experience
 - You can create records pointing to sepcific AWS Regions
 - You can have at most one record with the same name in each region.
 - This can be combined with health checks to return the healthiest lowest latency record.
 - Used for global infrastructure.
 
-
 ### R53 Geolocation Routing
+
 - Similar to latency, but instead it is used the location for deciding which record to return
 - The geolocation is used by taggin the records with either a country, a continent or a US State.
 - AWS does an IP check to see the location of the user. Using this it returns the matching records. It starts by checking the state if it is in the U.S, then the country and lastly the continent.
@@ -2130,13 +2137,15 @@ The below image shows a split view, where the access to the accounting section i
 - This is useful for dividing content. For example something U.S only
 
 ### R53 Geoproximity Routing
+
 - Provides records as close to your customer, you can provide coordinates or the region
 - Similar to the latency, but instead of using lowest latency, but this one works on distance
 - You can create a bias to expand or decrease region size.
 
-
 ### R53 Interoperability
+
 - R53 normally has 2 jobs:
+
   1. Domain registrar
   2. Domain Hosting
 
@@ -2147,67 +2156,76 @@ The below image shows a split view, where the access to the accounting section i
 
 - Usually if R53 is not doing both things, it will be the registrar somewhere else (e.g. GoDaddy) and the hosting on R53, since the hosting part is what gives the most functionality.
 
-
 # Relational Database Service (RDS)
+
 ### Wide column Store (DynamoDB)
+
 - A wide-column store is like a 2-dimensional key-value store, where the first key is used as a row identifier and the second is used as a column identifier.
 - The combination of keys needs to be unique
 - It is very fast and scalable
 
-
 ### Document Database ()
+
 - Like a key-value store, but you can interact with the values of the JSON/HTML/etc associated to the key.
 - The ideal scenarios are when you need to interact with whole documents or deep attributes. (catalogs, user profiles)
 - Useful where the content is unique, but it changes over time.
 
-
 ### Row Store Databases (MySQL)
+
 - Ideal when you are operating on rows (OLTP)
 - It stores the data as rows
 - It is slow when it comes to analysis that need a bunch of rows.
 
 ### Column Database (Redshift)
+
 - Useful when you need to retrieve a big amount of rows, on just a set of your columns, maybe for analysis. (OLAP)
 - Stores the data as columns, instead of row.
 
 ### Graph Databases
+
 - Relationships between things are formerly defines and stored in the database itself along with the data, they are not calculated.
 - It works with nodes and edges. Nodes is the actual data, edges store the relationship and direction of different nodes (e.g. work_for, lives_in)
 
 ## ACID vs. BASE
+
 - They are both DB transaction models
 - CAP Theorem - Consistency, Availability and Partition Tolerant (resilience) - Choose 2 :)
+
   1. Consistency - Any read from the DB will get the latest Write or an error.
   2. Availability - Every request will receive a non error response BUT without a guarantee for the most recent write
   3. System can be made of multiple network partitions and continues to operate even if there are error between these nodes.
 
 - CAP Theorem states that any DB product is only able to provide 2 of these 3 factors.
 
-
 - ACID = Consistency
 - BASE = Availability
 
 ### ACID (Atomic, Consistent, Isolated, Durable)
+
 ![ACID Transactions](../media/ACID_transactions.PNG)
+
 - Usually RDS (SQL)
 - ACID limits the ability to scale
 
 ### BASE (Basically Available, Soft State, Eventually Consistent)
+
 ![BASE Transactions](../media/BASE_transactions.PNG)
+
 - Usually NoSQL (DynamoDB)
 - Easy to scale
 
-
 ## Databases on EC2 (Bad Practice)
+
 **Why might you do it...**
+
 - You need OS level access in the DB instance
 - Advanced DB Option tuning... (DBROOT)
 - DB or DB versions that AWS do not provide
 - Vendor demands...
 - Specific OS/DB Combination
 
-
 **Why you should not...**
+
 - Admin Overhead - managing EC2 and DBHost
 - Backup / Disaster Recovery Management
 - EC2 is single AZ (Also EBS)
@@ -2215,3 +2233,25 @@ The below image shows a split view, where the access to the accounting section i
 - No easy scaling, can't be serverless
 - Replication
 - Performance
+
+### RDS (Relational Database Service)
+
+- It is not really a Database-as-a-Service (DBaaS) but a DatabaseServer-as-a-Service
+- This is because it provides managed DB instances which can themselves hold one or more DBs.
+- Supports multiple engines like MySQL, MariaDB, PostgreSQL, SQL Server, Oracle.
+- Amazon Aurora (AWS DB engine), it is actually part of RDS, but this is really different and considered as a separate product.
+
+#### RDS Instance
+
+- Can contain multiple user created DBs
+- You can access the DB with a DB hostname (CNAME)
+- You can access the DBs with the same tools you usually use.
+- RDS instances images are all prefixed with db ( e.g. db.m5, db.r5)
+- When you deploy a DB instance it comes with an EBS volume attached to it.
+- You are billed for different components like
+
+  - The instance type (CPU, memory)
+  - Amount of storage you allocate (GB per month)
+
+- You can gain access via Security Groups.
+- When deploying an RDS you need to configure a subnet group which esentially is the group of subnets where you want RDS to configure an instance.
