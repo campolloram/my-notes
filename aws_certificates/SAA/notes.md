@@ -2255,3 +2255,47 @@ The below image shows a split view, where the access to the accounting section i
 
 - You can gain access via Security Groups.
 - When deploying an RDS you need to configure a subnet group which esentially is the group of subnets where you want RDS to configure an instance.
+
+#### RDS Multi AZ
+
+- You have a primary instance and a stand-by instance
+- The stand-by is in sync with the primary thanks to "syncronous replication"
+- You access the DB via a CNAME and the CNAME NORMALLY points to the primary instance.
+- The stand-by can't be used for offloading extra load, it just sits there accepting data from the primary instance.
+- The writes between the primary instance and the stand-by occur almost at the same time, so there is very little to no lag between them. That's why it is called synchrounous repliation, because it occurs at the same time.
+- If there is an error with the primary instance, RDS shifts the CNAME from the primary to the stand-by, usually it only takes 60 to 120 seconds to shift.
+- Exam question: RDS Multi AZ provides High-Availability but do not provide Fault-Tolrance.
+
+**EXAM POWER UP (RDS - Multi AZ):**
+![RDS MultiAZ](../media/RDS_multiaz.png)
+
+### RDS Backups and Restores
+
+- RPO = Recover Point Objective
+  - Time between the last backup and when the data was corrupted (Amount of time of data loss, the lower RPO, means more backups)
+    -RTO - Recovery Time Objective
+  - Time between a failure and when the system comes back to service. It can be reduced by having spare hardware and a system that can recover quickly.
+
+There are two types of backups:
+
+- Automatic Snapshots
+- Manual Snapshots
+
+Both are stored in S3, so they are regional resilience, within AWS managed buckets (wont be visible)
+
+- They occur either from the single DB instance if multi AZ disabled, or the standby in the multi AZ enabled.
+
+- Snapshots are manual, so you need to trigger them and they are incremental
+
+- Manual snapshots DO NOT EXPIRE, you need to manually delete them even if you delete an RDS instance
+
+- Snapshots contain all the DB instances inside you RDS
+
+- Automatic Backups are just snapshots that occur automatically and you can configure the frequency.
+
+- Automatic backups are cleaned up after the retention period expires (it can be from 0 to 35 days)
+
+- Besides these snapshots, RDS stores every 5 minutes the transaction logs. This means that you can restore your DB with a 5 minute granularity by bringing the latest shanpshot and then just recreating the transactions on top.
+
+EXAM POWER UP (RDS Restores):
+![RDS Restores](../media/RDS_Restores.png)
