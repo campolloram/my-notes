@@ -2299,3 +2299,12 @@ Both are stored in S3, so they are regional resilience, within AWS managed bucke
 
 EXAM POWER UP (RDS Restores):
 ![RDS Restores](../media/RDS_Restores.png)
+
+
+RDS - Read-Replicas
+
+- They keep in sync by using async replication.
+- There could be a small amount of lag.
+- Could be on the same region or cross region.
+- You could have up to 5 direct read-replicas per DB instance.
+- You can configure your app to perform read operations against read replicas and only use the primary to perform write operations.
