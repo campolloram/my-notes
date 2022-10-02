@@ -2308,3 +2308,47 @@ RDS - Read-Replicas
 - Could be on the same region or cross region.
 - You could have up to 5 direct read-replicas per DB instance.
 - You can configure your app to perform read operations against read replicas and only use the primary to perform write operations.
+
+### Amazon RDS Security
+- SSL/TLS (in transit) is available for RDS, can be mandatory
+- RDS supports EBS volume encryption - KMS
+- Handled by HOST/EBS
+- AWS or Customer Managed CMK generates data keys
+- Data keys are used for encryption operations
+- Storage, Logs, Snashots & replicas are encrypted
+- ENCRYPTION CANT BE REMOVED!
+- RDS MSSQL and RDS Oracle support TDE (Transparent Data Encryption)
+- In TDE Encryption is handled within the engine.
+- You can use IAM Authentication for creating tokens either from a user or a role, this token is later used to access the DB.
+- The token is only used for authentication, authorization is still handled inside the DB based on the permissions mapped to the token.
+
+### Amazon Aurora Architecture
+- It is officially part of RDS, but it needs to be treated as its own product
+- Archiotecture is VERY different from RDS...
+- Uses "Clusters" which have a single primary instance + 0 or more replicas.
+- The replicas of auroras can actually be used for read operating during normal operations.
+- Aurora do not use local storage for the compute instances, it uses a cluster volume, which is shared between the DB instances.
+- This provides benefits like:
+  - Faster provisioning
+  - Improved Availability
+  - Faster Performance
+- You can have up to 15 replicas
+- Failover is handled by Aurora and its quicker thanks to its cluster nature.
+- Storage is simple based on what you consume.
+Storage is billed based on what's used.
+- High water mark - billed for the most used
+- Because the storage is for the cluster, replicas can be added and removed wihtout storage provisioning.
+- Aurora cluster have multiple endpoints available e.g. 
+  - Cluster Endpoint (Writes)
+  - Reader Endpoint (Load Balancer for all the replicas)
+  - You can also create custom endpoints, and every replica has its own endpoint as well.
+
+- No free tier option, because it doesn't support Micro instances
+- Beyond RDS singleAZ (micro) Aurora offers better value
+- Compute - housrly charge, per second, 10 minute minimum
+- Storage -GB-Month consumed, IO cost per request
+- You can use "Backtrack" which allows rollback in place to a previos point in time (no config needed in apps).
+- Backtrack is needed to be configured per cluster basis.
+
+
+
