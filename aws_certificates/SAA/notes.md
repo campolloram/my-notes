@@ -2351,4 +2351,53 @@ Storage is billed based on what's used.
 - Backtrack is needed to be configured per cluster basis.
 
 
+### Aurora Serverless
+- It is to Aurora what Fargate is to ECS.
+- Scalable - ACU - Aurora Capacity Units
+- It has a mina dn max ACU
+- Cluster adjusts based on load
+- Can go to 0 and pe paused
+- Consumption billing per-second basis
+- Same resilience as Aurora (6 copies across AZs)
 
+**Differences**
+- It uses Capacity Units which are taken from a Pool shared by all AWS
+- You connect via a Proxy Fleet instead of directly to the ACUs
+
+
+**When to use Aurora Serverless?**
+- Infrequently used applications
+- New applications (unsure of load)
+- Variable workloads (peaks)
+- Unpredictable workloads
+
+
+### Aurora Global Database
+- Allow you to create global level replication using Aurora from a master region to up to 5 secondary AWS regions.
+- 1 second or less replication between regions
+- No impact on DB performance
+- Really good for
+  1. Cross-Region Disaster Recovery and Business Continuity
+  2. Low latency to international customers
+
+
+### Aurora Multi-Master (Fault-Tolerant)
+- Non-default mode which lets you have multiple read/write instances.
+- There is no concept of failover since all instances are R/W
+- The application needs to manually load balance across the instances.
+- Same concept as Aurora but with some differences:
+  1. No load balancer for the cluster (no cluster endpoint)
+  2. Whenever a write is commited to a instance, it commits it to all the cluster.
+  3. If a chorum (number of instances) agrees on the commit, then it proceeds.
+
+
+### Database Migration Service (DMS)
+- A managed DB migration service
+- Runs using a replicatoin instance
+- Source and Destination Endpoints which points at the source and targe database
+- One endpount MUST be on AWS.
+- It uses replication tasks for moving data from the source to the destination.
+- No DOWNTIME
+- Best default to use when you have your DB in AWS.
+- SCT (Schema Conversion Tool) is used when converting one DB engine to another.
+- Works with OLTP DBs and OLAP DBs.
