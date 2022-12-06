@@ -69,7 +69,7 @@ frequency space.
 • Pan the off ending instrument to a diff erent location.
 
 
-**Vocals first**
+**Vocals/Lead/Kick first**
 
 - Wherever you start from, mixers generally agree that the vocal, or whatever is the most prominent or significant melody instrument, has to make its entrance into the mix as soon as possible. The reason for this is
 two-fold
@@ -80,3 +80,67 @@ two-fold
 
 
 ### Element 2: Panorama—Placing the Sound in the Soundfield
+
+tldr; For dance music, panning is not so important since most of your elements need to be in mono (bass, kick, snare, lead) so just pan 1:30, 10:30 some of the other elements like a shaker.
+
+### Element 3: Frequency Range—Equalizing
+
+- In the quest to make things sound bigger, fatter, brighter, and clearer, the equalizer is the chief tool that most mixers use. But perhaps more than
+any other audio tool, the use of the equalizer requires a skill that separates the average engineer from the master.
+
+
+**There are three primary goals when equalizing:**
+- Make an instrument sound clearer and more defined.
+- Make the instrument or mix bigger and larger than life.
+- Make all the elements of a mix fit together better by juggling frequencies so that each instrument has its own predominate frequency range.
+
+### The Magic Frequencies
+![Frequencies table](./media/frequencies_table.PNG)
+
+
+**Rule of Thumb**
+- The fewer the instruments in the mix, the bigger each one should be.
+
+- Conversely, the more instruments in the mix, the smaller each one needs to be for everything to fit together.
+
+
+### How to Equalize
+
+**Logic:**
+
+Equalize to make all the elements of a mix fit together better by juggling frequencies so that each instrument has its own predominate frequency range.
+1. Start with the rhythm section (bass and drums). The bass should be clear and distinct when played against the drums, especially the kick
+and snare. You should be able to hear each instrument distinctly. If not, do the
+following:
+
+    - Make sure that no two equalizers are boosting at the same frequency. If they are, move one to a slightly higher or lower frequency.
+
+    - If an instrument is cut at a certain frequency, boost the frequency of the other instrument at that same frequency. For example, if the kick is cut at 500Hz, boost the bass at 500Hz.
+
+2. Add the next most predominant element, usually the vocal, and proceed as above.
+
+3. Add the rest of the elements into the mix one by one. As you add each instrument, check it against the previous elements as above.
+
+
+**Easy-to-Remember Golden Rules of Equalization**
+- If it sounds muddy, cut some at 250Hz.
+- If it sounds honky, cut some at 500Hz.
+- Cut if you’re trying to make things sound better.
+- Boost if you’re trying to make things sound different.
+- You can’t boost something that’s not there in the first place.
+
+
+**How to EQ the Kick and Bass**
+
+Kick Drum Frequencies
+- 30 – 80 Hz  – fundamental tone
+- 300 – 600 Hz – boxiness (cut here)
+- 4 – 8 kHz – Click
+- Above 5 kHz – bleed from cymbals (cut here)
+
+Bass Frequencies
+- 30 – 100 Hz – thickness of synth sub-bass
+- 50 – 150 Hz – thickness of bass guitar
+- 150 – 400 Hz – muddy range of bass
+- 800 – 2 kHz – clarity and presence for bass
+
