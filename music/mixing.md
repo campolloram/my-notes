@@ -130,6 +130,9 @@ following:
 - You can’t boost something that’s not there in the first place.
 
 
+
+
+## Notes from other sources
 **How to EQ the Kick and Bass**
 
 Kick Drum Frequencies
@@ -143,4 +146,15 @@ Bass Frequencies
 - 50 – 150 Hz – thickness of bass guitar
 - 150 – 400 Hz – muddy range of bass
 - 800 – 2 kHz – clarity and presence for bass
+
+
+**The Top-Down Mixing Approach**
+
+Start mixing the most important elements and then down the hierarchy. Usually for house/techno is:
+
+1. Kick
+2. Bass
+3. Snare/clap
+4. Lead synth/ Lead vocals
+
 
