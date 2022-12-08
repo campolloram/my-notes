@@ -1,7 +1,7 @@
 # My Notes
 Hey everyone!
 
-This repository contains my personal notes for different technologies I'm studying.
+This repository contains my personal notes for different thing I'm studying.
 
 
 
