@@ -94,7 +94,7 @@ any other audio tool, the use of the equalizer requires a skill that separates t
 - Make the instrument or mix bigger and larger than life.
 - Make all the elements of a mix fit together better by juggling frequencies so that each instrument has its own predominate frequency range.
 
-### The Magic Frequencies
+#### The Magic Frequencies
 ![Frequencies table](./media/frequencies_table.PNG)
 
 
@@ -104,7 +104,7 @@ any other audio tool, the use of the equalizer requires a skill that separates t
 - Conversely, the more instruments in the mix, the smaller each one needs to be for everything to fit together.
 
 
-### How to Equalize
+#### How to Equalize
 
 **Logic:**
 
@@ -130,11 +130,16 @@ following:
 - You can’t boost something that’s not there in the first place.
 
 
+Pro Tip: Think of EQing as an effect. First do you standard EQing in your track and after that think of it as an effect to boost/cut certain frequencies in order to produce a better sound.
 
 
+### Element 4: Dimension — Adding Effects
+
+left in page 40
 ## Notes from other sources
-**How to EQ the Kick and Bass**
+------------------------
 
+### How to EQ the Kick and Bass
 Kick Drum Frequencies
 - 30 – 80 Hz  – fundamental tone
 - 300 – 600 Hz – boxiness (cut here)
@@ -147,14 +152,37 @@ Bass Frequencies
 - 150 – 400 Hz – muddy range of bass
 - 800 – 2 kHz – clarity and presence for bass
 
+source: https://www.sonarworks.com/blog/learn/eliminate-competition-between-the-kick-and-bass
 
-**The Top-Down Mixing Approach**
+------------------------
+### The Top-Down Mixing Approach
 
 Start mixing the most important elements and then down the hierarchy. Usually for house/techno is:
 
-1. Kick
+1. Kick -12db
 2. Bass
 3. Snare/clap
 4. Lead synth/ Lead vocals
+
+
+### Kick and Bass Bussing Technique
+
+- Group the kick and the bass
+- Add a drum buss to it (adjust parameters as you wish)
+- Add a glue compressor with some makeup
+- Add a utility and lower the gain until it is peaking at the same db that it was before adding the grouping effects
+
+### Side-chain the reverb channel of your vocals to your dry signal
+
+This is done in order to let the dry vocal duck the reverb and then let the reverb come back to live.
+
+
+### Add a little bit of room reverb to all the tracks
+
+Create an aux channel with a room reverb with short decay and send the kicks, the drums and pretty much every track to it.
+
+source: https://www.youtube.com/watch?v=buBH3aPBQ5k&ab_channel=EDMTips
+
+------------------------
 
 
