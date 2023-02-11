@@ -135,7 +135,14 @@ Pro Tip: Think of EQing as an effect. First do you standard EQing in your track 
 
 ### Element 4: Dimension — Adding Effects
 
-left in page 40
+Just like panning places you either right or left, effects place the sound in front or in the back.
+
+If the audio has effects it makes it like if it was sitting on the back while a dry signal sounds in front of you.
+
+
+Pro-tip: Small reverbs or short delays make things sound bigger.
+
+
 ## Notes from other sources
 ------------------------
 
@@ -185,4 +192,101 @@ source: https://www.youtube.com/watch?v=buBH3aPBQ5k&ab_channel=EDMTips
 
 ------------------------
 
+## How to Mix
+The steps are:
+1.  Prep
+2. Volume Balance
+3. Compression
+4. EQ
+5. Space (Panning, Reverb, and Delay)
+6. Volume Automation
+7. Effects
+8. Final Checks
 
+
+### Step 1: Pre
+
+Make sure to organize your session
+![Frequencies table](./media/pre-step.png)
+
+Gain stage:
+![Frequencies table](./media/pre-stage-gain.png)
+
+**Use a reference track:**
+
+You never want to mix from memory. Your mixes will end up sounding pretty good in your own speakers but will fall apart anywhere else.
+
+Comparing every aspect of your mix to a reference track – the low end, the mids, the snare volume, the vocal reverb, and so on – will increase the quality of your mixes tenfold.
+
+### Step 2: Volume Balance
+![Frequencies table](./media/step2-volume-balancing.png)
+
+While working on your volume balance, I’d recommend listening to your monitors or headphones at a low level. That will keep your mix moves accurate.
+
+The louder you listen to your mix, the better the mix sounds. That’s great in the moment.
+
+
+### Step 3: Compression
+Usually your vocals, kick and drums need to have compression since you want them to be your foundation. Compression helps to keep them in place.
+
+### Step 4: EQ
+Make sure to EQ any resonance specially in your vocals. You can EQ an individual track to get rid of resonance, room reverb, etc. Or you can use EQ for making a track blend into the mix. In the first case you need to EQ with the track soloed, in the second case you need to EQ with all the tracks playing.
+
+
+### Step 5: Space (Panning, Reverb, and Delay)
+**Panning**
+
+Either pan your isntruments 50% to one side, or 100% to one side or right in the middle.
+
+
+**Reverb**
+
+Gives the ilussion of being in a "room" and creates the illusion that the instrument is farther away from the listener.
+
+
+That means that instruments at the front of the stage should have only a little reverb. But instruments at the back of the stage should have a lot more.
+
+![Frequencies table](./media/reverb-part1.png)
+![Frequencies table](./media/reverb-part2.png)
+
+**Delay**
+
+Delay does a great job of creating a space around an instrument without pushing it too far back in the mix.
+
+It’s especially great for vocals that you want to keep front and center.
+
+![Frequencies table](./media/delay-part1.png)
+![Frequencies table](./media/delay-part2.png)
+
+
+### Step 6: Add Automation
+Add automation to volume, frequency, etc for adding excitement to the song.
+
+Make sure to pay attention at volume automation in case you need to make louder or quieter certain tracks at certain points in time.
+
+
+### Step 7: Effects
+Add effects to your tracks like heavy delays, distortion, chorus effect, etc.
+
+
+Many people use delays as an effect. These delays are meant to be loud and obvious rather than the subtle delay you used for the vocals.
+
+You’ll set them up in the same way as the vocal delay described above, but the delay time can be any length you want.
+
+For a starting place, a quarter note delay often sounds cool as a vocal effect. And a dotted quarter note delay can sound very cool on an electric guitar.
+
+### Step 8: Final Checks
+
+A few tips for using your final check step effectively:
+
+- **Give yourself at least a 12-hour break before starting.**
+        
+        Let your ears reacclimate to the sound of the world. You’ll hear more problems with your mix with a set of fresh ears.
+
+- **Listen to the song from beginning to end and take notes.** 
+        
+        What would you change about this mix? That list is your guide to finishing this step up.
+
+- **Don’t forget to use your reference tracks.** 
+
+        Listen to them every fifteen minutes or so to re-acclimate your ears to the sound of a professional mix. You’ll find more problems in your own mix that way… which means you can fix those problems!
