@@ -2401,3 +2401,17 @@ Storage is billed based on what's used.
 - Best default to use when you have your DB in AWS.
 - SCT (Schema Conversion Tool) is used when converting one DB engine to another.
 - Works with OLTP DBs and OLAP DBs.
+
+
+### EFS (Elastic File System)
+- Is an implementation of NFSv4
+- Shared between EC2 Instances
+- Similar to EBS but instead of block storage is file storage
+- Can be accesible outside of a VPC using hybrid networks
+- It uses Mount Targets to connect to the EC2 instances
+- It has two classes:
+  1. Standard
+  2. Infrequent Access (cheaper)
+
+
+
