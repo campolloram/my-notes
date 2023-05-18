@@ -183,3 +183,22 @@ Google's 7 Solutions Pillars (not asked in exam)
 ![GCP Solution Pillars 2](./media/GCP-solution-pillars-2.PNG)
 
 
+## Cloud Shell
+A free online env with a command line and a online code editor for cloud development
+
+## Projects and Folders
+A project in GCP is a logical grouping of resources.
+A cloud resource must belong to a project
+
+A project is made up of:
+- Settings
+- Permissions
+- Other medatada
+
+A project can't access another project's resources unless you use shared VPC or VPC Netowork Peering
+
+Each project has the following:
+- A name
+- An ID
+- A project number
+
