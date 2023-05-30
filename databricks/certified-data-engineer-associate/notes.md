@@ -49,18 +49,19 @@ Data could be:
 ## DataBricks Lakehouse Platform
 ### Delta Lake
 - Delta lake is an open source storage framework that brings reliability to data lakes, since data lakes have many limitations like:
-- data inconsistency
-- performance issues
+    - data inconsistency
+    - performance issues
 
-What is it?
-- Open source tech
-- Storage framework/layer
-- Enabling building Lakehouse
+- What is it?
+    - Open source tech
+    - Storage framework/layer
+    - Enabling building Lakehouse
 
-What is NOT?
-- Propietary tech
-- Storage format/medium
-- Data warehouse/Database service
+- What is NOT?
+    - Propietary tech
+    - Storage format/medium
+    - Data warehouse/Database service
+
 
 - Is a component which is deployed in the cluster as part of the databricks runtime
 
@@ -202,4 +203,210 @@ For querying files you can specify the format and the location. You can also cre
 
 The solution for this is to create a temporary view for this data source and then create a table from that view. This way you are extracting the data from an external data source and loading it into a Delta Table.
 
+### Merging
+Use the MERGE INTO operation to avoid duplicates, this way you can specify the condition on when you don't want to insert certain records and maybe you just want to update the matching record with new information from the table to be merged and in case there is no match then you insert.
 
+## Advanced Transformations
+- use "**:**" to traverse nested jsons e.g 
+
+    ```
+    SELECT
+        customer_id,
+        profile:name,
+        profile:address:country
+    FROM customers
+    ```
+
+- from_json -> parses json to struct types (struct is a native spark type with nested attributes), you need to provide the schema by using **schema_of_json** function. With struct type you can use the syntax **profile_struct.address.country** instead
+
+- Once a json field is converted to a struct type you can use the * operator to flatten fields, like so:
+
+    ```
+    SELECT profile_struct.* FROM parsed_customers
+    ```
+
+
+- When dealing with arrays you can use the **explode** function to make each element of the array into its own row
+
+- **collect_set** -> You can use this aggregation function to collect unique values for a field.
+    - e.g.
+
+        ```
+        SELECT 
+            customer_id, 
+            collect_set(order_id) AS order_set, 
+            collect_set(books.book_id) AS books_set 
+        FROM orders GROUP BY customer_id
+        ```
+
+- **flatten** -> flats out an array of arrays
+
+### Set operators
+Spark SQL also supports set operations like:
+- Union
+- Intersect
+- Minus
+
+### Pivot
+Spark SQL supports Pivot which is used to change data perspective. You can get aggregated values based on a specific column
+
+## Higher Order Functions
+**FILTER**
+
+You use a lambda function to filter the rows and create a new column
+
+e.g.
+```
+SELECT
+    order_id,
+    books,
+    FILTER(books, i -> i.quantity >= 2) as multiple_copies
+FROM orders
+```
+
+
+**TRANSFORM**
+
+It is used to a transformation on all the items of an array and extract the transformed value
+
+e.g.
+```
+SELECT
+    order_id,
+    books,
+    TRANSFORM (
+        books,
+        b -> CAST(b.subtotal * 0.8 AS INT)
+    ) AS subtotal_after_discount
+FROM orders;
+```
+
+**User Defined Functions (UDFs)**
+
+Allows you to register a custom combination of SQL logic as function in a database, making these methods reusable in any SQL query
+
+e.g.
+```
+CREATE OR REPLACE FUNCTION get_url(email STRING)
+RETURNS STRING
+
+RETURN concat("https://www.", split(email, "@")[1])
+```
+These are permanent persisted functions that can be reused in different sessions and notebooks.
+
+## Incremental Data Processing
+### Structured Streaming
+**What is a Data Stream?**
+- Any data source that grows over time
+    - New files landing in cloud storage
+    - Updates to a DB captured in a CDC feed
+    - Events queued in a pub/sub messaging feed
+
+There are 2 approaches:
+1. Reprocess the entire source ataset each time
+2. Only process those new data added since last update.
+    - Spark Structured Streaming
+
+Spark Structured Streaming is a scalable streaming processing engine, it allows you to query an infinite data source where automatically detects new data and persist the result.
+
+- It treats the infinite Data as a Table
+- New data is treated as new rows in the table
+
+We can use spark.readStream() to query the Delta Table as a stream source, which allows to process all of the data present in the table as well as any new data that arrives later. It creates a data frame which allow us to apply any transformation as if it was just a static dataframe.
+
+To persist the result of the stream, we can use the writeStream method to ouput it into a table
+
+You can use a fixed interval, triggered batch by either micro-batches or all available data.
+
+
+### Checkpointing
+DataBricks create checkpoints by storing the current state of your streaming job to cloud storage, it allows the streaming engine to track the progress of your process.
+
+### Guarantees
+1. Fault Tolerance
+    - Checpointing + Write-ahead logs
+        - record the offset range of data being processed during each trigger interval
+
+2. Exactly-once guarantee
+    - Idempotent sinks (multiple writes of the same data do not result on duplicates being written to the sink.)
+
+### Unsupported Operations
+- Some operations are not supported on streaming DFs
+    - Sorting
+    - Deduplication
+
+- There are advanced methods for accomplishing that, like:
+    - Windowing
+    - Watermarking
+    
+
+## Incremental Data Ingestion
+- The ability to load data from new files that have been encountered since the last ingestion.
+
+- Databricks provides 2 mechanisms:
+    - COPY INTO
+    - Auto loader
+
+**COPY INTO**
+- This is a SQL command that allow suser to load data from a file location into a Delta Table.
+- Loads new data files idempotently and incrementally. This means that skippes files that have already been loaded.
+
+**Auto Loader**
+- Uses structured streaming in Spark
+- Can process billions of files
+- Support near real-time ingestion of millions of files per hour.
+- Store metadata of the discovered files
+- Exactly-once guarantees
+- Fault tolerance.
+
+For this we use readStream and writeStream methods.
+
+
+**When to use Auto Loader vs COPY INTO?**
+- If you are going to ingest file in order of thousands, you can use the COPY INTO command.
+
+- If you are expecting files in order of millions or more over time, use Auto Loader.
+
+- In addition, auto loader can split the processing into multiple batches so it is more efficient at scale.
+
+- Databricks recommends to use Auto Loader as general best practice when ingesting data from a cloud object storage.
+
+
+## Multi-Hop Architecture
+- A multi hop architecture, also known as Medallion architecture, is a data design pattern used to logically organize data in multilayered approach.
+
+- Its goal is to incrementally improve the structure and the quality of the data as it flows through each layer of the architecture.
+
+- Multi hop architecture usually consists of three layers: 
+    - Bronze
+    - Silver
+    - Gold
+
+**Bronze table**
+- Contains raw data ingested from various sources.
+- Like json files, operational databases, or Kafka Stream, for example.
+
+**Silver table**
+
+- Provides more refined view of our data. 
+- For example, data can be cleaned and filtered at this level.
+- And we can also join fields from various brands table to enrich our silver records.
+
+**Gold Table**
+- Provides business-level aggregations, often used for reporting and dashboarding or even for machine learning.
+
+**SUMMARY**
+
+- With this architecture, we incrementally improve the structure and the quality of data as it flows through each layer.
+
+- There are many benefits for multi hop architecture.
+
+    - It is a simple data model that is easy to understand and implement.
+
+    - It enables incremental ETL.
+
+    - It can combine streaming and batch workloads in the same pipeline.
+
+    - It can recreate your tables from raw data at any time.
+
+![Multi Hop Architecture](../media/multi-hop-architecture.PNG)
