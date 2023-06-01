@@ -410,3 +410,39 @@ For this we use readStream and writeStream methods.
     - It can recreate your tables from raw data at any time.
 
 ![Multi Hop Architecture](../media/multi-hop-architecture.PNG)
+
+
+
+## Delta Live Tables (DLT)
+- Simplifies the work of building large scale ETL while maintaining table dependencies and data quality.
+- They are implemented using databricks notebooks
+- You can use the **cloud_files** method to enable auto loader to be used natively with SQL e.g.
+```
+CREATE OR REFRESH STREAMING LIVE TABLE orders_raw
+AS SELECT * FROM cloud_files("path/to/files", "parquet", 
+                                map("schema", "order_id" STRING, ...))
+```
+
+
+You can also create constraints for data cleaneaning direcly using SQL like so:
+
+```
+CREATE OR REFRESH STREAMING LIVE TABLE orders_cleaned (
+    CONSTRAINT valid_order_number EXPECT (order_id IS NOT null) ON VIOLATION DROP ROW
+)
+AS
+    SELECT ...
+    FROM STREAM(LIVE.orders_raw) o
+    LEFT JOIN LIVE.customers c
+        ON o.customer_id = c.customer_id
+```
+
+Note how we need to use the LIVE prefix to refer to other DLT tables.
+
+
+## Change Data Caputre (CDC)
+- Is the Process of identifying changes made to data in the source and delivering those changes to the target.
+- They can be additions, updates or deletions
+- Changes are logged at the source as events that contain both the data of the records and the metadata information.
+- Delta Live Tables supports CDC via APPLY CHANGES INTO command.
+
