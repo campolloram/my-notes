@@ -40,11 +40,30 @@ Data could be:
 - Semi-Structured
 - Unstructured (images & videos)
 
+### Cluster Types
+![Cluster Types](../media/cluster-types.PNG)
+
+### Cluster Configuration steps
+![Cluster Config](../media/cluster-config.PNG)
+
+1. Define if you want a single node or a multi-node that enables scaling (for big workloads)
+2. The Access Mode defines if you want a single user access or a shared, multi-user access
+3. Databricks Runtime defines if you want Databricks Runtime, Databricks ML Runtime, Photon Runtime or Databricks Light Runtime.
+4. Auto Termination - How much time until the cluster terminates by itself (saves costs)
+5. Cluster VM Type/Size - Memory intensive, compute intensive, general purpose, etc.
+6. Cluster Policy - Limits the configuration needed to create a cluster. Great for providing Data Scientists with restricted access on cluster creation and an easier interface.
+
+### Cluster Pools
+- Clusters usually take time to start up an Auto Scale.
+
+- In order to minimize that time, we can use Pools.
+
+- A Cluster Pool is basically a set of idle ready to use virtual machines, that allow us to reduce the cluster start and Auto Scaling times.
+
 ### DBFS
 - It is a distributed file system
 - Preinstalled in Databricks Cluster
 - It is an abstraction layer, under the hood data is persisted to the underlaying cloud storage
-
 
 ## DataBricks Lakehouse Platform
 ### Delta Lake
