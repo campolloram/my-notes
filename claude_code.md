@@ -2,7 +2,7 @@
 
 ## Commands
 - /init -> Use this command for creating a CLAUDE.md file, this file contains information about your proyect.
-- # -> Use the hashtag to tell claude instructions that it should add to the CLAUDE.md
+- \# -> Use the hashtag to tell claude instructions that it should add to the CLAUDE.md
 - /exit -> Exits the chat session completely.
 - /clear -> Clears the entire session context and chat history.
 - /compact -> Compacts the chat and context into a small summary.
